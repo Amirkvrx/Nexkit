@@ -92,6 +92,7 @@
     textarea.input-field {
       height: 80px;
       resize: vertical;
+      text-align: right;
     }
     .btn {
       background: var(--bg);
@@ -104,7 +105,6 @@
       width: 100%;
     }
     .btn-accent { background: var(--accent-indigo); color: white; }
-    .flex-gap { display: flex; gap: 8px; }
   </style>
 </head>
 <body>
@@ -159,6 +159,12 @@
     <p id="textStats">حروف: 0 | کلمات: 0</p>
   </div>
 
+  <!-- یادداشت سریع -->
+  <div class="card">
+    <h3>📌 یادداشت سریع (ذخیره خودکار)</h3>
+    <textarea class="input-field" id="noteInput" placeholder="یادداشت خود را بنویسید..." oninput="saveNote()"></textarea>
+  </div>
+
   <script>
     function toggleTheme() {
       const body = document.body;
@@ -208,6 +214,18 @@
       const words = text.trim() ? text.trim().split(/\s+/).length : 0;
       document.getElementById('textStats').innerText = `حروف: ${chars} | کلمات: ${words}`;
     }
+
+    function saveNote() {
+      const note = document.getElementById('noteInput').value;
+      localStorage.setItem('nexkit_note', note);
+    }
+
+    window.onload = function() {
+      const savedNote = localStorage.getItem('nexkit_note');
+      if (savedNote) {
+        document.getElementById('noteInput').value = savedNote;
+      }
+    };
   </script>
 </body>
 </html>
