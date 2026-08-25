@@ -32,38 +32,21 @@
 
   <!-- منوی تب‌ها -->
   <div class="nav-tabs">
-    <button class="tab-btn" onclick="switchTab('level', this)" data-i18n="level">Level</button>
-    <button class="tab-btn" onclick="switchTab('compass', this)" data-i18n="compass">Compass</button>
     <button class="tab-btn" onclick="switchTab('calc', this)" data-i18n="calc">Calculator</button>
     <button class="tab-btn" onclick="switchTab('converter', this)" data-i18n="converter">Converter</button>
-    <button class="tab-btn" onclick="switchTab('conv-history', this)">Conv. History</button>
+    <button class="tab-btn" onclick="switchTab('conv-history', this)">History</button>
     <button class="tab-btn" onclick="switchTab('text', this)" data-i18n="text">Text</button>
     <button class="tab-btn" onclick="switchTab('notes', this)" data-i18n="notes">Notes</button>
     <button class="tab-btn" onclick="switchTab('todo', this)" data-i18n="todo">To-Do</button>
     <button class="tab-btn" onclick="switchTab('clock', this)" data-i18n="clock">World Clock</button>
     <button class="tab-btn" onclick="switchTab('pass', this)" data-i18n="pass">Password</button>
-    <button class="tab-btn" onclick="switchTab('history', this)" data-i18n="history">History</button>
     <button class="tab-btn" onclick="switchTab('qr', this)" data-i18n="qr">QR Code</button>
     <button class="tab-btn" onclick="switchTab('torch', this)" data-i18n="torch">Flashlight</button>
     <button class="tab-btn" onclick="switchTab('gps', this)" data-i18n="gps">GPS</button>
-    <button class="tab-btn" onclick="switchTab('settings', this)">Settings</button>
+    <button class="tab-btn" onclick="switchTab('settings', this)" data-i18n="settings">Settings</button>
   </div>
 
-  <!-- تب‌ها -->
-  <div class="card" id="tab-level" style="text-align: center;">
-    <h3 data-i18n="level">Digital Level</h3>
-    <div class="bubble-box"><div class="bubble" id="bubble"></div></div>
-    <p id="level-info">Initializing sensor...</p>
-    <button class="btn btn-accent" onclick="initSensor()">Activate Sensor</button>
-  </div>
-
-  <div class="card" id="tab-compass" style="text-align: center;">
-    <h3 data-i18n="compass">Digital Compass</h3>
-    <div class="compass-box"><div class="compass-needle" id="needle"></div></div>
-    <p id="compass-info">Waiting for direction...</p>
-    <button class="btn btn-accent" onclick="initCompass()">Activate Compass</button>
-  </div>
-
+  <!-- تب ماشین حساب -->
   <div class="card" id="tab-calc">
     <h3 data-i18n="calc">Calculator</h3>
     <input type="text" class="input-field" id="screen" readonly>
@@ -87,6 +70,7 @@
     </div>
   </div>
 
+  <!-- تب مبدل‌ها -->
   <div class="card" id="tab-converter">
     <h3 data-i18n="converter">Length Converter</h3>
     <input type="number" class="input-field" id="cmInput" placeholder="Value in cm..." oninput="convertLength()">
@@ -106,68 +90,74 @@
     <p id="tempResult" style="font-family: monospace; color: var(--accent-cyan);">Result: -</p>
   </div>
 
+  <!-- تب تاریخچه مبدل‌ها -->
   <div class="card" id="tab-conv-history">
     <h3>Conversion History</h3>
     <div id="conversionHistoryList" style="margin-top: 10px;">Loading history...</div>
   </div>
 
+  <!-- تب شمارشگر متن -->
   <div class="card" id="tab-text">
     <h3 data-i18n="text">Text Counter</h3>
-    <textarea class="input-field" id="textInput" data-i18n-placeholder="notePlaceholder" placeholder="Enter text..." oninput="countText()"></textarea>
+    <textarea class="input-field" id="textInput" placeholder="Enter text..." oninput="countText()"></textarea>
     <p id="textStats">Chars: 0 | Words: 0</p>
   </div>
 
+  <!-- تب یادداشت -->
   <div class="card" id="tab-notes">
     <h3 data-i18n="notes">Quick Notes</h3>
-    <textarea class="input-field" id="noteInput" data-i18n-placeholder="notePlaceholder" placeholder="Write your note..." oninput="saveNote()"></textarea>
+    <textarea class="input-field" id="noteInput" placeholder="Write your note..." oninput="saveNote()"></textarea>
   </div>
 
+  <!-- تب کارها -->
   <div class="card" id="tab-todo">
     <h3 data-i18n="todo">To-Do List</h3>
     <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-      <input type="text" class="input-field" id="taskInput" data-i18n-placeholder="taskPlaceholder" placeholder="New task..." style="margin-bottom: 0;">
+      <input type="text" class="input-field" id="taskInput" placeholder="New task..." style="margin-bottom: 0;">
       <button class="btn btn-accent" onclick="addTask()" style="width: 80px;" data-i18n="addTaskBtn">Add</button>
     </div>
     <div id="taskList"></div>
   </div>
 
+  <!-- تب ساعت جهانی -->
   <div class="card" id="tab-clock">
     <h3 data-i18n="clock">World Clock</h3>
     <div id="worldClockList" style="margin-top: 10px;">Loading clocks...</div>
   </div>
 
+  <!-- تب تولید رمز -->
   <div class="card" id="tab-pass">
     <h3 data-i18n="pass">Password Generator</h3>
     <div class="pass-output" id="passOutput">Secure Password</div>
     <button class="btn btn-accent" onclick="generatePassword()" data-i18n="genPassBtn">Generate New</button>
+    <div id="passHistoryList" style="margin-top: 15px; font-size: 13px;"></div>
   </div>
 
-  <div class="card" id="tab-history">
-    <h3 data-i18n="history">Password History</h3>
-    <div id="passHistoryList" style="margin-top: 10px; font-size: 14px;">No password history yet.</div>
-  </div>
-
+  <!-- تب QR Code -->
   <div class="card" id="tab-qr">
     <h3 data-i18n="qr">QR Code Generator</h3>
     <input type="text" class="input-field" id="qrInput" placeholder="Link or text..." oninput="generateQR()">
-    <div id="qrcode"></div>
+    <div id="qrcode" style="margin-top: 10px; display: flex; justify-content: center;"></div>
   </div>
 
+  <!-- تب چراغ‌قوه -->
   <div class="card" id="tab-torch" style="text-align: center;">
     <h3 data-i18n="torch">Flashlight</h3>
-    <p style="color: var(--border); margin-bottom: 15px;">Turns your screen into a bright white light source.</p>
+    <p style="color: var(--border); margin-bottom: 15px; font-size: 14px;">Turns your screen into a bright white light source.</p>
     <button class="btn btn-accent" onclick="toggleScreenTorch()" style="padding: 14px 28px; font-size: 16px;">💡 Turn On Light</button>
   </div>
 
+  <!-- تب GPS -->
   <div class="card" id="tab-gps" style="text-align: center;">
     <h3 data-i18n="gps">GPS Location</h3>
-    <p id="gps-info">Location not received yet.</p>
+    <p id="gps-info" style="margin-bottom: 15px; font-size: 14px;">Location not received yet.</p>
     <button class="btn btn-accent" onclick="getLocation()" data-i18n="getGpsBtn">Get GPS Location</button>
   </div>
 
+  <!-- تب تنظیمات -->
   <div class="card" id="tab-settings">
-    <h3>App Settings & Customization</h3>
-    <p style="color: var(--border); margin-bottom: 15px; font-size: 14px;">Customize your app accent color:</p>
+    <h3 data-i18n="settings">Settings</h3>
+    <p style="color: var(--border); margin-bottom: 12px; font-size: 14px;">App Accent Color:</p>
     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
       <button onclick="setAccentColor('#00bcd4')" style="width: 36px; height: 36px; border-radius: 50%; background: #00bcd4; border: none; cursor: pointer;"></button>
       <button onclick="setAccentColor('#4caf50')" style="width: 36px; height: 36px; border-radius: 50%; background: #4caf50; border: none; cursor: pointer;"></button>
