@@ -251,3 +251,9 @@ if (typeof translations !== 'undefined') {
   translations.en.cryptoGuideText = "How to use Base64:\n1. Enter normal text to Encode or Base64 string to Decode.\n2. Click the desired operation button.\n3. Copy or download the output result.";
   translations.fa.cryptoGuideText = "راهنمای Base64:\n۱. متن معمولی برای کدگذاری یا متن Base64 برای کدگشایی را وارد کنید.\n۲. دکمه عملیات مورد نظر را بزنید.\n۳. خروجی را کپی یا دانلود کنید.";
 }
+
+// اضافه کردن راهنمای Case Converter به زبان‌های مختلف
+if (typeof translations !== 'undefined') {
+  translations.en.caseGuideText = "How to use Case Converter:\n1. Paste or type your text in the input box.\n2. Choose a format: UPPERCASE, lowercase, Title Case, or camelCase.\n3. Copy or download the result.";
+  translations.fa.caseGuideText = "راهنمای تغییر فرمت حروف:\n۱. متن خود را در کادر وارد کنید.\n۲. روی یکی از حالت‌ها (حروف بزرگ، کوچک، عنوان یا شترکلید) کلیک کنید.\n۳. متن تبدیل‌شده را کپی یا دانلود کنید.";
+}
