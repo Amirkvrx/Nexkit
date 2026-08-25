@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,41 +11,59 @@
 <body>
   <div class="header">
     <div class="logo">Nexkit</div>
-    <button class="theme-btn" onclick="toggleTheme()">🌙 / ☀️</button>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <!-- منوی انتخاب ۱۲ زبان -->
+      <select id="langSelector" onchange="setLanguage(this.value)" class="theme-btn" style="cursor: pointer; padding: 6px 10px;">
+        <option value="en">English</option>
+        <option value="fa">فارسی</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="zh">中文</option>
+        <option value="ja">日本語</option>
+        <option value="ru">Русский</option>
+        <option value="ar">العربية</option>
+        <option value="pt">Português</option>
+        <option value="tr">Türkçe</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+      <button class="theme-btn" onclick="toggleTheme()">🌙 / ☀️</button>
+    </div>
   </div>
 
   <!-- منوی تب‌ها -->
   <div class="nav-tabs">
-    <button class="tab-btn" onclick="switchTab('level', this)">تراز</button>
-    <button class="tab-btn" onclick="switchTab('compass', this)">قطب‌نما</button>
-    <button class="tab-btn" onclick="switchTab('calc', this)">ماشین‌حساب</button>
-    <button class="tab-btn" onclick="switchTab('converter', this)">مبدل</button>
-    <button class="tab-btn" onclick="switchTab('text', this)">متن</button>
-    <button class="tab-btn" onclick="switchTab('notes', this)">یادداشت</button>
-    <button class="tab-btn" onclick="switchTab('todo', this)">کارها</button>
-    <button class="tab-btn" onclick="switchTab('pass', this)">رمزساز</button>
-    <button class="tab-btn" onclick="switchTab('history', this)">تاریخچه</button>
-    <button class="tab-btn" onclick="switchTab('qr', this)">بارکد QR</button>
-    <button class="tab-btn" onclick="switchTab('gps', this)">موقعیت‌یاب</button>
+    <button class="tab-btn" onclick="switchTab('level', this)" data-i18n="level">Level</button>
+    <button class="tab-btn" onclick="switchTab('compass', this)" data-i18n="compass">Compass</button>
+    <button class="tab-btn" onclick="switchTab('calc', this)" data-i18n="calc">Calculator</button>
+    <button class="tab-btn" onclick="switchTab('converter', this)" data-i18n="converter">Converter</button>
+    <button class="tab-btn" onclick="switchTab('text', this)" data-i18n="text">Text</button>
+    <button class="tab-btn" onclick="switchTab('notes', this)" data-i18n="notes">Notes</button>
+    <button class="tab-btn" onclick="switchTab('todo', this)" data-i18n="todo">To-Do</button>
+    <button class="tab-btn" onclick="switchTab('clock', this)" data-i18n="clock">World Clock</button>
+    <button class="tab-btn" onclick="switchTab('pass', this)" data-i18n="pass">Password</button>
+    <button class="tab-btn" onclick="switchTab('history', this)" data-i18n="history">History</button>
+    <button class="tab-btn" onclick="switchTab('qr', this)" data-i18n="qr">QR Code</button>
+    <button class="tab-btn" onclick="switchTab('gps', this)" data-i18n="gps">GPS</button>
   </div>
 
   <!-- تب‌ها -->
   <div class="card" id="tab-level" style="text-align: center;">
-    <h3>📏 تراز دیجیتال</h3>
+    <h3 data-i18n="level">Digital Level</h3>
     <div class="bubble-box"><div class="bubble" id="bubble"></div></div>
-    <p id="level-info">در حال دریافت سنسور...</p>
-    <button class="btn btn-accent" onclick="initSensor()">فعال‌سازی سنسور</button>
+    <p id="level-info">Initializing sensor...</p>
+    <button class="btn btn-accent" onclick="initSensor()">Activate Sensor</button>
   </div>
 
   <div class="card" id="tab-compass" style="text-align: center;">
-    <h3>🧭 قطب‌نمای دیجیتال</h3>
+    <h3 data-i18n="compass">Digital Compass</h3>
     <div class="compass-box"><div class="compass-needle" id="needle"></div></div>
-    <p id="compass-info">در انتظار جهت‌یابی...</p>
-    <button class="btn btn-accent" onclick="initCompass()">فعال‌سازی قطب‌نما</button>
+    <p id="compass-info">Waiting for direction...</p>
+    <button class="btn btn-accent" onclick="initCompass()">Activate Compass</button>
   </div>
 
   <div class="card" id="tab-calc">
-    <h3>🔢 ماشین‌حساب</h3>
+    <h3 data-i18n="calc">Calculator</h3>
     <input type="text" class="input-field" id="screen" readonly>
     <div class="calc-grid">
       <button class="btn" onclick="clearCalc()">C</button>
@@ -68,52 +86,57 @@
   </div>
 
   <div class="card" id="tab-converter">
-    <h3>🔄 مبدل طول</h3>
-    <input type="number" class="input-field" id="cmInput" placeholder="مقدار به سانتی‌متر..." oninput="convertLength()">
-    <p id="inchResult">نتیجه: 0 اینچ</p>
+    <h3 data-i18n="converter">Length Converter</h3>
+    <input type="number" class="input-field" id="cmInput" placeholder="Value in cm..." oninput="convertLength()">
+    <p id="inchResult">Result: 0 inches</p>
   </div>
 
   <div class="card" id="tab-text">
-    <h3>📝 شمارنده متن</h3>
-    <textarea class="input-field" id="textInput" placeholder="متن خود را وارد کنید..." oninput="countText()"></textarea>
-    <p id="textStats">حروف: 0 | کلمات: 0</p>
+    <h3 data-i18n="text">Text Counter</h3>
+    <textarea class="input-field" id="textInput" data-i18n-placeholder="notePlaceholder" placeholder="Enter text..." oninput="countText()"></textarea>
+    <p id="textStats">Chars: 0 | Words: 0</p>
   </div>
 
   <div class="card" id="tab-notes">
-    <h3>📌 یادداشت سریع</h3>
-    <textarea class="input-field" id="noteInput" placeholder="یادداشت خود را بنویسید (ذخیره خودکار)..." oninput="saveNote()"></textarea>
+    <h3 data-i18n="notes">Quick Notes</h3>
+    <textarea class="input-field" id="noteInput" data-i18n-placeholder="notePlaceholder" placeholder="Write your note..." oninput="saveNote()"></textarea>
   </div>
 
   <div class="card" id="tab-todo">
-    <h3>✅ لیست وظایف</h3>
+    <h3 data-i18n="todo">To-Do List</h3>
     <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-      <input type="text" class="input-field" id="taskInput" placeholder="کار جدید..." style="margin-bottom: 0;">
-      <button class="btn btn-accent" onclick="addTask()" style="width: 80px;">افزودن</button>
+      <input type="text" class="input-field" id="taskInput" data-i18n-placeholder="taskPlaceholder" placeholder="New task..." style="margin-bottom: 0;">
+      <button class="btn btn-accent" onclick="addTask()" style="width: 80px;" data-i18n="addTaskBtn">Add</button>
     </div>
     <div id="taskList"></div>
   </div>
 
+  <div class="card" id="tab-clock">
+    <h3 data-i18n="clock">World Clock</h3>
+    <div id="worldClockList" style="margin-top: 10px;">Loading clocks...</div>
+  </div>
+
   <div class="card" id="tab-pass">
-    <h3>🔐 تولیدکننده رمز عبور</h3>
-    <div class="pass-output" id="passOutput">رمز عبور امن</div>
-    <button class="btn btn-accent" onclick="generatePassword()">ساخت رمز جدید</button>
+    <h3 data-i18n="pass">Password Generator</h3>
+    <div class="pass-output" id="passOutput">Secure Password</div>
+    <button class="btn btn-accent" onclick="generatePassword()" data-i18n="genPassBtn">Generate New</button>
   </div>
 
   <div class="card" id="tab-history">
-    <h3>📜 تاریخچه رمزهای عبور</h3>
-    <div id="passHistoryList" style="margin-top: 10px; font-size: 14px;">هنوز رمز عبوری ذخیره نشده است.</div>
+    <h3 data-i18n="history">Password History</h3>
+    <div id="passHistoryList" style="margin-top: 10px; font-size: 14px;">No password history yet.</div>
   </div>
 
   <div class="card" id="tab-qr">
-    <h3>📱 ساخت بارکد QR</h3>
-    <input type="text" class="input-field" id="qrInput" placeholder="لینک یا متن..." oninput="generateQR()">
+    <h3 data-i18n="qr">QR Code Generator</h3>
+    <input type="text" class="input-field" id="qrInput" placeholder="Link or text..." oninput="generateQR()">
     <div id="qrcode"></div>
   </div>
 
   <div class="card" id="tab-gps" style="text-align: center;">
-    <h3>📍 موقعیت‌یاب جغرافیایی</h3>
-    <p id="gps-info">موقعیت شما هنوز دریافت نشده است.</p>
-    <button class="btn btn-accent" onclick="getLocation()">دریافت موقعیت GPS</button>
+    <h3 data-i18n="gps">GPS Location</h3>
+    <p id="gps-info">Location not received yet.</p>
+    <button class="btn btn-accent" onclick="getLocation()" data-i18n="getGpsBtn">Get GPS Location</button>
   </div>
 
   <script src="app.logic.js"></script>
