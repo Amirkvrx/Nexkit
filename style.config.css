@@ -200,3 +200,36 @@ textarea.input-field {
 /* Diff Output */
 .diff-added { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
 .diff-removed { background: rgba(244, 67, 54, 0.2); color: #f44336; }
+
+/* Sub-tabs for tool guides */
+.sub-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+}
+.sub-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  color: var(--border);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s ease;
+}
+.sub-tab-btn.active {
+  color: var(--accent-cyan);
+  border-bottom-color: var(--accent-cyan);
+}
+.guide-content {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}

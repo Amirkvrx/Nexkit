@@ -296,3 +296,19 @@ if (typeof translations !== 'undefined') {
   if (translations.en) translations.en.colorTool = "Color Tools";
   if (translations.fa) translations.fa.colorTool = "ابزار رنگ";
 }
+
+// مدیریت تب‌های داخلی راهنما برای هر ابزار
+function switchSubTab(toolPrefix, tabType, btnElement) {
+  const card = document.getElementById(`tab-${toolPrefix}`);
+  if (!card) return;
+  
+  // مخفی کردن همه محتواهای این کارت
+  card.querySelectorAll('.sub-pane').forEach(pane => pane.style.display = 'none');
+  // نمایش تب انتخاب شده
+  const targetPane = document.getElementById(`${toolPrefix}-${tabType}`);
+  if (targetPane) targetPane.style.display = 'block';
+  
+  // بروزرسانی استایل دکمه‌ها
+  card.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+  if (btnElement) btnElement.classList.add('active');
+}
