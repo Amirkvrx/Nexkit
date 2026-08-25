@@ -185,3 +185,21 @@ window.addEventListener('DOMContentLoaded', () => {
   const defaultBtn = document.querySelector(`.tab-btn[onclick*="${activeTab}"]`);
   switchTab(activeTab, defaultBtn);
 });
+
+// --- قابلیت اشتراک‌گذاری وب (Web Share API) ---
+function shareContent(title, text) {
+  if (navigator.share) {
+    navigator.share({ title: title, text: text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text);
+    alert('Copied to clipboard!');
+  }
+}
+
+// ثبت تاریخچه فعالیت‌ها در LocalStorage
+function saveHistory(toolName, resultText) {
+  let history = JSON.parse(localStorage.getItem('nexkit_history') || '[]');
+  history.unshift({ tool: toolName, text: resultText, time: new Date().toLocaleTimeString() });
+  if (history.length > 15) history.pop(); // نگهداری ۱۵ مورد آخر
+  localStorage.setItem('nexkit_history', JSON.stringify(history));
+}
