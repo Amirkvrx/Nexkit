@@ -170,3 +170,39 @@ window.addEventListener('DOMContentLoaded', () => {
   const defaultBtn = document.querySelector(`.tab-btn[onclick*="${activeTab}"]`);
   switchTab(activeTab, defaultBtn);
 });
+
+// دکمه کپی هوشمند خروجی‌ها
+function copyToClipboard(elementId) {
+  const el = document.getElementById(elementId);
+  const text = el.innerText || el.value;
+  if (!text) return;
+  
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Copied to clipboard!');
+  }).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert('Copied!');
+  });
+}
+
+// تولیدکننده رمز عبور و راهنما
+function generatePassword() {
+  const length = parseInt(document.getElementById('passLength').value) || 12;
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+  let pass = "";
+  for (let i = 0; i < length; i++) {
+    pass += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  document.getElementById('passOutput').value = pass;
+}
+
+// اضافه کردن متن راهنمای رمز عبور به شیء ترجمه‌ها
+if (typeof translations !== 'undefined') {
+  translations.en.passGuideText = "How to use Password Generator:\n1. Select desired password length.\n2. Click 'Generate' to create a strong random password.\n3. Click 'Copy' to use it securely.";
+  translations.fa.passGuideText = "راهنمای تولید رمز عبور:\n۱. طول رمز عبور مورد نظر را تعیین کنید.\n۲. روی 'تولید رمز' کلیک کنید تا یک رمز قوی و تصادفی ساخته شود.\n۳. با دکمه 'کپی' آن را ذخیره کنید.";
+}
