@@ -541,3 +541,32 @@ function updateTextStats(inputId, statsId) {
     statsEl.innerText = `Words: ${words} | Chars: ${chars} | Lines: ${lines}`;
   }
 }
+
+// حفظ آخرین تب انتخاب‌شده در حافظه مرورگر
+function switchTab(tabName, btnElement) {
+  const cards = document.querySelectorAll('.tool-card');
+  cards.forEach(card => card.style.display = 'none');
+
+  const navBtns = document.querySelectorAll('.tab-btn');
+  navBtns.forEach(btn => btn.classList.remove('active'));
+
+  if (btnElement) {
+    btnElement.classList.add('active');
+  } else {
+    // فعال‌سازی دکمه بر اساس نام تب
+    const targetBtn = document.querySelector(`.tab-btn[onclick*="'${tabName}'"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+  }
+
+  const targetCard = document.getElementById('tab-' + tabName);
+  if (targetCard) {
+    targetCard.style.display = 'block';
+    localStorage.setItem('nexkit_active_tab', tabName);
+  }
+}
+
+// بازیابی آخرین تب هنگام بارگذاری صفحه
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTab = localStorage.getItem('nexkit_active_tab') || 'calc';
+  switchTab(savedTab, null);
+});

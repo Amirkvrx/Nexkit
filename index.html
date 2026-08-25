@@ -173,7 +173,8 @@
         <button class="btn sub-tab-guide" onclick="switchSubTab('base64', 'guide', this)">Guide</button>
       </div>
       <div id="base64-tool">
-        <textarea class="input-field" id="cryptoInput" placeholder="Enter text..." style="min-height: 70px;"></textarea>
+        <textarea class="input-field" id="cryptoInput" placeholder="Enter text..." style="min-height: 70px;" oninput="updateTextStats('cryptoInput', 'cryptoStats')"></textarea>
+        <div id="cryptoStats" style="font-size: 12px; color: var(--text-sub, #666); margin-bottom: 8px; font-family: monospace;">Words: 0 | Chars: 0 | Lines: 0</div>
         <div style="display: flex; gap: 8px; margin-bottom: 10px;">
           <button class="btn btn-accent" onclick="processBase64('encode')" style="flex: 1;">Encode</button>
           <button class="btn" onclick="processBase64('decode')" style="flex: 1;">Decode</button>
