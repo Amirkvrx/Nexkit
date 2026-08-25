@@ -23,6 +23,7 @@
     <button class="tab-btn" onclick="switchTab('text', this)">متن</button>
     <button class="tab-btn" onclick="switchTab('notes', this)">یادداشت</button>
     <button class="tab-btn" onclick="switchTab('pass', this)">رمزساز</button>
+    <button class="tab-btn" onclick="switchTab('history', this)">تاریخچه</button>
     <button class="tab-btn" onclick="switchTab('qr', this)">بارکد QR</button>
     <button class="tab-btn" onclick="switchTab('gps', this)">موقعیت‌یاب</button>
   </div>
@@ -86,6 +87,11 @@
     <h3>🔐 تولیدکننده رمز عبور</h3>
     <div class="pass-output" id="passOutput">رمز عبور امن</div>
     <button class="btn btn-accent" onclick="generatePassword()">ساخت رمز جدید</button>
+  </div>
+
+  <div class="card" id="tab-history">
+    <h3>📜 تاریخچه رمزهای عبور</h3>
+    <div id="passHistoryList" style="margin-top: 10px; font-size: 14px;">هنوز رمز عبوری ذخیره نشده است.</div>
   </div>
 
   <div class="card" id="tab-qr">

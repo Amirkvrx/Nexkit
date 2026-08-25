@@ -151,3 +151,28 @@ generatePassword = function() {
   originalGenPass();
   showToast('رمز عبور جدید ساخته شد 🔐');
 };
+
+// مدیریت تاریخچه رمزهای عبور
+let passwordHistory = JSON.parse(localStorage.getItem('nexkit_pass_history')) || [];
+
+const originalGenPassForHistory = generatePassword;
+generatePassword = function() {
+  originalGenPassForHistory();
+  const pass = document.getElementById('passOutput').innerText;
+  passwordHistory.unshift(pass);
+  if (passwordHistory.length > 5) passwordHistory.pop(); // نگهداری ۵ مورد آخر
+  localStorage.setItem('nexkit_pass_history', JSON.stringify(passwordHistory));
+  updateHistoryUI();
+};
+
+function updateHistoryUI() {
+  const historyList = document.getElementById('passHistoryList');
+  if (historyList) {
+    historyList.innerHTML = passwordHistory.map(p => `<div style="padding: 6px; background: var(--bg); margin-bottom: 4px; border-radius: 6px; font-family: monospace;">${p}</div>`).join('');
+  }
+}
+
+// بارگذاری تاریخچه هنگام لود صفحه
+window.addEventListener('load', () => {
+  updateHistoryUI();
+});
