@@ -122,3 +122,32 @@ if ('serviceWorker' in navigator) {
       .catch((err) => console.log('Service Worker registration failed:', err));
   });
 }
+
+// تابع نمایش اعلان (Toast)
+function showToast(message) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.innerText = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2500);
+}
+
+// به‌روزرسانی بخش ذخیره یادداشت برای نمایش اعلان
+const originalSaveNote = saveNote;
+saveNote = function() {
+  originalSaveNote();
+  showToast('یادداشت با موفقیت ذخیره شد 📌');
+};
+
+// به‌روزرسانی ساخت رمز عبور برای کپی خودکار یا نمایش پیام
+const originalGenPass = generatePassword;
+generatePassword = function() {
+  originalGenPass();
+  showToast('رمز عبور جدید ساخته شد 🔐');
+};
