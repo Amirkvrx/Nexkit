@@ -528,3 +528,16 @@ function filterTools() {
     }
   });
 }
+
+// تابع محاسبه آمار متن (کاراکتر، کلمه و خطوط)
+function updateTextStats(inputId, statsId) {
+  const text = document.getElementById(inputId).value || "";
+  const chars = text.length;
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const lines = text ? text.split('\n').length : 0;
+
+  const statsEl = document.getElementById(statsId);
+  if (statsEl) {
+    statsEl.innerText = `Words: ${words} | Chars: ${chars} | Lines: ${lines}`;
+  }
+}
