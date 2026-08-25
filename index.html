@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NexKit App</title>
+  <title>Nexkit App</title>
   <style>
     :root {
       --bg: #0F172A;
@@ -44,68 +44,119 @@
       border-radius: 20px;
       cursor: pointer;
     }
-    .level-container {
+    .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
     }
     .bubble-box {
-      width: 150px;
-      height: 150px;
+      width: 140px;
+      height: 140px;
       border: 4px solid var(--accent-cyan);
       border-radius: 50%;
       margin: 15px auto;
       position: relative;
     }
     .bubble {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       background: #10B981;
       border-radius: 50%;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      transition: all 0.1s ease;
+      transition: transform 0.1s ease;
     }
-    .grid {
+    .calc-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 10px;
     }
-    .card {
-      background: var(--card-bg);
+    .input-field {
+      width: 100%;
+      height: 40px;
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      text-align: center;
-      font-weight: bold;
+      color: var(--text);
+      text-align: left;
+      font-size: 16px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
     }
+    textarea.input-field {
+      height: 80px;
+      resize: vertical;
+    }
+    .btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .btn-accent { background: var(--accent-indigo); color: white; }
+    .flex-gap { display: flex; gap: 8px; }
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="logo">NexKit</div>
+    <div class="logo">Nexkit</div>
     <button class="theme-btn" onclick="toggleTheme()">🌙 / ☀️ تغییر تم</button>
   </div>
 
-  <!-- ابزار تراز دیجیتال -->
-  <div class="level-container">
+  <!-- تراز دیجیتال -->
+  <div class="card" style="text-align: center;">
     <h3>📏 تراز دیجیتال</h3>
-    <div class="bubble-box">
-      <div class="bubble" id="bubble"></div>
-    </div>
-    <p id="level-info">در حال دریافت اطلاعات سنسور...</p>
+    <div class="bubble-box"><div class="bubble" id="bubble"></div></div>
+    <p id="level-info">در حال دریافت سنسور...</p>
     <button class="theme-btn" onclick="initSensor()">فعال‌سازی سنسور</button>
   </div>
 
-  <h3>دسته‌بندی‌ها</h3>
-  <div class="grid">
-    <div class="card" style="color: var(--accent-cyan)">📏 اندازه‌گیری</div>
-    <div class="card" style="color: var(--accent-indigo)">🔢 محاسبات</div>
+  <!-- ماشین‌حساب -->
+  <div class="card">
+    <h3>🔢 ماشین‌حساب</h3>
+    <input type="text" class="input-field" id="screen" readonly>
+    <div class="calc-grid">
+      <button class="btn" onclick="clearCalc()">C</button>
+      <button class="btn" onclick="press('/')">/</button>
+      <button class="btn" onclick="press('*')">*</button>
+      <button class="btn" onclick="press('-')">-</button>
+      <button class="btn" onclick="press('7')">7</button>
+      <button class="btn" onclick="press('8')">8</button>
+      <button class="btn" onclick="press('9')">9</button>
+      <button class="btn" onclick="press('+')">+</button>
+      <button class="btn" onclick="press('4')">4</button>
+      <button class="btn" onclick="press('5')">5</button>
+      <button class="btn" onclick="press('6')">6</button>
+      <button class="btn btn-accent" onclick="calculate()">=</button>
+      <button class="btn" onclick="press('1')">1</button>
+      <button class="btn" onclick="press('2')">2</button>
+      <button class="btn" onclick="press('3')">3</button>
+      <button class="btn" onclick="press('0')">0</button>
+    </div>
+  </div>
+
+  <!-- مبدل طول -->
+  <div class="card">
+    <h3>🔄 مبدل طول (سانتی‌متر به اینچ)</h3>
+    <input type="number" class="input-field" id="cmInput" placeholder="مقدار به سانتی‌متر..." oninput="convertLength()">
+    <p id="inchResult">نتیجه: 0 اینچ</p>
+  </div>
+
+  <!-- پردازش متن -->
+  <div class="card">
+    <h3>📝 شمارنده متن</h3>
+    <textarea class="input-field" id="textInput" placeholder="متن خود را وارد کنید..." oninput="countText()"></textarea>
+    <p id="textStats">حروف: 0 | کلمات: 0</p>
   </div>
 
   <script>
@@ -123,22 +174,39 @@
         window.addEventListener('deviceorientation', handleOrientation);
         document.getElementById('level-info').innerText = "سنسور فعال شد.";
       } else {
-        document.getElementById('level-info').innerText = "سنسور توسط مرورگر پشتیبانی نمی‌شود.";
+        document.getElementById('level-info').innerText = "سنسور پشتیبانی نمی‌شود.";
       }
     }
 
     function handleOrientation(event) {
-      const x = event.gamma; // چپ و راست (-90 تا 90)
-      const y = event.beta;  // جلو و عقب (-180 تا 180)
-
+      const x = event.gamma || 0;
+      const y = event.beta || 0;
       const bubble = document.getElementById('bubble');
-      const maxOffset = 60;
-
+      const maxOffset = 50;
       let posX = Math.max(-maxOffset, Math.min(maxOffset, x));
       let posY = Math.max(-maxOffset, Math.min(maxOffset, y));
-
       bubble.style.transform = `translate(calc(-50% + ${posX}px), calc(-50% + ${posY}px))`;
       document.getElementById('level-info').innerText = `X: ${Math.round(x)}° | Y: ${Math.round(y)}°`;
+    }
+
+    let screen = document.getElementById('screen');
+    function press(val) { screen.value += val; }
+    function clearCalc() { screen.value = ''; }
+    function calculate() {
+      try { screen.value = eval(screen.value); }
+      catch { screen.value = 'خطا'; }
+    }
+
+    function convertLength() {
+      const cm = parseFloat(document.getElementById('cmInput').value) || 0;
+      document.getElementById('inchResult').innerText = `نتیجه: ${(cm / 2.54).toFixed(2)} اینچ`;
+    }
+
+    function countText() {
+      const text = document.getElementById('textInput').value;
+      const chars = text.length;
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      document.getElementById('textStats').innerText = `حروف: ${chars} | کلمات: ${words}`;
     }
   </script>
 </body>
