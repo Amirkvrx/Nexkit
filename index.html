@@ -4,167 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexkit App</title>
+  <link rel="stylesheet" href="style.config.css">
+  <link rel="manifest" href="manifest.json">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    :root {
-      --bg: #0F172A;
-      --card-bg: #1E293B;
-      --text: #FFFFFF;
-      --accent-cyan: #06B6D4;
-      --accent-indigo: #6366F1;
-      --border: rgba(255, 255, 255, 0.1);
-    }
-    [data-theme="high-contrast"] {
-      --bg: #F8FAFC;
-      --card-bg: #FFFFFF;
-      --text: #0F172A;
-      --accent-cyan: #0284C7;
-      --accent-indigo: #4F46E5;
-      --border: #CBD5E1;
-    }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      padding: 16px;
-      transition: all 0.3s ease;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .logo { font-size: 24px; font-weight: bold; }
-    .theme-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 8px 12px;
-      border-radius: 20px;
-      cursor: pointer;
-    }
-    .nav-tabs {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 16px;
-      white-space: nowrap;
-    }
-    .tab-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .tab-btn.active {
-      background: var(--accent-indigo);
-      border-color: var(--accent-indigo);
-    }
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      display: none;
-    }
-    .card.active {
-      display: block;
-    }
-    .bubble-box, .compass-box {
-      width: 140px;
-      height: 140px;
-      border: 4px solid var(--accent-cyan);
-      border-radius: 50%;
-      margin: 15px auto;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .bubble {
-      width: 22px;
-      height: 22px;
-      background: #10B981;
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s ease;
-    }
-    .compass-needle {
-      width: 6px;
-      height: 100px;
-      background: linear-gradient(to top, #64748B 50%, #EF4444 50%);
-      position: absolute;
-      transition: transform 0.1s ease;
-      border-radius: 3px;
-    }
-    .calc-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .input-field {
-      width: 100%;
-      height: 40px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      text-align: left;
-      font-size: 16px;
-      padding: 5px 10px;
-      border-radius: 8px;
-      box-sizing: border-box;
-      margin-bottom: 10px;
-    }
-    textarea.input-field {
-      height: 100px;
-      resize: vertical;
-      text-align: right;
-    }
-    .btn {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-      width: 100%;
-    }
-    .btn-accent { background: var(--accent-indigo); color: white; border: none; }
-    .pass-output {
-      font-family: monospace;
-      letter-spacing: 1px;
-      font-size: 18px;
-      text-align: center;
-      background: var(--bg);
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      margin-bottom: 10px;
-    }
-    #qrcode {
-      display: flex;
-      justify-content: center;
-      margin-top: 15px;
-      background: white;
-      padding: 10px;
-      border-radius: 8px;
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  </style>
 </head>
 <body>
   <div class="header">
@@ -185,7 +27,7 @@
     <button class="tab-btn" onclick="switchTab('gps', this)">موقعیت‌یاب</button>
   </div>
 
-  <!-- تب ۱: تراز -->
+  <!-- تب‌ها -->
   <div class="card" id="tab-level" style="text-align: center;">
     <h3>📏 تراز دیجیتال</h3>
     <div class="bubble-box"><div class="bubble" id="bubble"></div></div>
@@ -193,7 +35,6 @@
     <button class="btn btn-accent" onclick="initSensor()">فعال‌سازی سنسور</button>
   </div>
 
-  <!-- تب ۲: قطب‌نما -->
   <div class="card" id="tab-compass" style="text-align: center;">
     <h3>🧭 قطب‌نمای دیجیتال</h3>
     <div class="compass-box"><div class="compass-needle" id="needle"></div></div>
@@ -201,7 +42,6 @@
     <button class="btn btn-accent" onclick="initCompass()">فعال‌سازی قطب‌نما</button>
   </div>
 
-  <!-- تب ۳: ماشین‌حساب -->
   <div class="card" id="tab-calc">
     <h3>🔢 ماشین‌حساب</h3>
     <input type="text" class="input-field" id="screen" readonly>
@@ -225,163 +65,41 @@
     </div>
   </div>
 
-  <!-- تب ۴: مبدل -->
   <div class="card" id="tab-converter">
     <h3>🔄 مبدل طول</h3>
     <input type="number" class="input-field" id="cmInput" placeholder="مقدار به سانتی‌متر..." oninput="convertLength()">
     <p id="inchResult">نتیجه: 0 اینچ</p>
   </div>
 
-  <!-- تب ۵: متن -->
   <div class="card" id="tab-text">
     <h3>📝 شمارنده متن</h3>
     <textarea class="input-field" id="textInput" placeholder="متن خود را وارد کنید..." oninput="countText()"></textarea>
     <p id="textStats">حروف: 0 | کلمات: 0</p>
   </div>
 
-  <!-- تب ۶: یادداشت -->
   <div class="card" id="tab-notes">
     <h3>📌 یادداشت سریع</h3>
     <textarea class="input-field" id="noteInput" placeholder="یادداشت خود را بنویسید (ذخیره خودکار)..." oninput="saveNote()"></textarea>
   </div>
 
-  <!-- تب ۷: رمزساز -->
   <div class="card" id="tab-pass">
     <h3>🔐 تولیدکننده رمز عبور</h3>
     <div class="pass-output" id="passOutput">رمز عبور امن</div>
     <button class="btn btn-accent" onclick="generatePassword()">ساخت رمز جدید</button>
   </div>
 
-  <!-- تب ۸: بارکد QR -->
   <div class="card" id="tab-qr">
     <h3>📱 ساخت بارکد QR</h3>
     <input type="text" class="input-field" id="qrInput" placeholder="لینک یا متن..." oninput="generateQR()">
     <div id="qrcode"></div>
   </div>
 
-  <!-- تب ۹: موقعیت‌یاب GPS -->
   <div class="card" id="tab-gps" style="text-align: center;">
     <h3>📍 موقعیت‌یاب جغرافیایی</h3>
     <p id="gps-info">موقعیت شما هنوز دریافت نشده است.</p>
     <button class="btn btn-accent" onclick="getLocation()">دریافت موقعیت GPS</button>
   </div>
 
-  <script>
-    function toggleTheme() {
-      const body = document.body;
-      const isDark = body.getAttribute('data-theme') === 'high-contrast';
-      body.setAttribute('data-theme', isDark ? '' : 'high-contrast');
-      localStorage.setItem('nexkit_theme', isDark ? 'dark' : 'light');
-    }
-
-    function switchTab(tabId, btnElement) {
-      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('tab-' + tabId).classList.add('active');
-      if (btnElement) {
-        btnElement.classList.add('active');
-        localStorage.setItem('nexkit_tab', tabId);
-      }
-      if(tabId === 'qr') generateQR();
-    }
-
-    function initSensor() {
-      if (window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', handleOrientation);
-        document.getElementById('level-info').innerText = "سنسور تراز فعال شد.";
-      } else {
-        document.getElementById('level-info').innerText = "پشتیبانی نمی‌شود.";
-      }
-    }
-
-    function handleOrientation(event) {
-      const x = event.gamma || 0;
-      const y = event.beta || 0;
-      const bubble = document.getElementById('bubble');
-      bubble.style.transform = `translate(calc(-50% + ${Math.max(-50, Math.min(50, x))}px), calc(-50% + ${Math.max(-50, Math.min(50, y))}px))`;
-      document.getElementById('level-info').innerText = `X: ${Math.round(x)}° | Y: ${Math.round(y)}°`;
-    }
-
-    function initCompass() {
-      if (window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', handleCompass);
-        document.getElementById('compass-info').innerText = "قطب‌نما فعال شد.";
-      } else {
-        document.getElementById('compass-info').innerText = "پشتیبانی نمی‌شود.";
-      }
-    }
-
-    function handleCompass(event) {
-      const alpha = event.alpha;
-      if (alpha !== null) {
-        document.getElementById('needle').style.transform = `rotate(${360 - alpha}deg)`;
-        document.getElementById('compass-info').innerText = `جهت: ${Math.round(alpha)} درجه`;
-      }
-    }
-
-    let screen = document.getElementById('screen');
-    function press(val) { screen.value += val; }
-    function clearCalc() { screen.value = ''; }
-    function calculate() {
-      try { screen.value = eval(screen.value); } catch { screen.value = 'خطا'; }
-    }
-
-    function convertLength() {
-      const cm = parseFloat(document.getElementById('cmInput').value) || 0;
-      document.getElementById('inchResult').innerText = `نتیجه: ${(cm / 2.54).toFixed(2)} اینچ`;
-    }
-
-    function countText() {
-      const text = document.getElementById('textInput').value;
-      document.getElementById('textStats').innerText = `حروف: ${text.length} | کلمات: ${text.trim() ? text.trim().split(/\s+/).length : 0}`;
-    }
-
-    function saveNote() {
-      localStorage.setItem('nexkit_note', document.getElementById('noteInput').value);
-    }
-
-    function generatePassword() {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*!";
-      let pass = "";
-      for (let i = 0; i < 12; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
-      document.getElementById('passOutput').innerText = pass;
-    }
-
-    function generateQR() {
-      const val = document.getElementById('qrInput').value || "https://github.com/Amirkvrx/Nexkit";
-      const container = document.getElementById('qrcode');
-      container.innerHTML = "";
-      new QRCode(container, { text: val, width: 128, height: 128 });
-    }
-
-    function getLocation() {
-      if (navigator.geolocation) {
-        document.getElementById('gps-info').innerText = "در حال دریافت موقعیت...";
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            const lat = pos.coords.latitude.toFixed(4);
-            const lon = pos.coords.longitude.toFixed(4);
-            document.getElementById('gps-info').innerText = `عرض جغرافیایی: ${lat}\nطول جغرافیایی: ${lon}`;
-          },
-          () => { document.getElementById('gps-info').innerText = "خطا در دریافت موقعیت یا عدم دسترسی."; }
-        );
-      } else {
-        document.getElementById('gps-info').innerText = "GPS در این مرورگر پشتیبانی نمی‌شود.";
-      }
-    }
-
-    window.onload = function() {
-      const savedNote = localStorage.getItem('nexkit_note');
-      if (savedNote) document.getElementById('noteInput').value = savedNote;
-
-      if (localStorage.getItem('nexkit_theme') === 'light') {
-        document.body.setAttribute('data-theme', 'high-contrast');
-      }
-
-      const savedTab = localStorage.getItem('nexkit_tab') || 'level';
-      const tabBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(savedTab));
-      switchTab(savedTab, tabBtn || document.querySelector('.tab-btn'));
-    };
-  </script>
+  <script src="app.logic.js"></script>
 </body>
 </html>
