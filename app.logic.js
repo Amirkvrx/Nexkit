@@ -495,3 +495,19 @@ function renderConversionHistory() {
 const originalConvertLength = window.convertLength;
 // ثبت در تاریخچه هنگام تبدیل طول
 // (می‌توانید با یک تایمر کوچک یا هنگام تغییر کامل مقدار ثبت کنید)
+
+// تغییر رنگ اصلی (Accent Color) برنامه
+function setAccentColor(color) {
+  document.documentElement.style.setProperty('--accent', color);
+  document.documentElement.style.setProperty('--accent-cyan', color);
+  localStorage.setItem('nexkit_accent', color);
+}
+
+// بارگذاری تنظیمات رنگ ذخیره‌شده هنگام لود
+window.addEventListener('DOMContentLoaded', () => {
+  const savedAccent = localStorage.getItem('nexkit_accent');
+  if (savedAccent) {
+    document.documentElement.style.setProperty('--accent', savedAccent);
+    document.documentElement.style.setProperty('--accent-cyan', savedAccent);
+  }
+});

@@ -46,6 +46,7 @@
     <button class="tab-btn" onclick="switchTab('qr', this)" data-i18n="qr">QR Code</button>
     <button class="tab-btn" onclick="switchTab('torch', this)" data-i18n="torch">Flashlight</button>
     <button class="tab-btn" onclick="switchTab('gps', this)" data-i18n="gps">GPS</button>
+    <button class="tab-btn" onclick="switchTab('settings', this)">Settings</button>
   </div>
 
   <!-- تب‌ها -->
@@ -162,6 +163,19 @@
     <h3 data-i18n="gps">GPS Location</h3>
     <p id="gps-info">Location not received yet.</p>
     <button class="btn btn-accent" onclick="getLocation()" data-i18n="getGpsBtn">Get GPS Location</button>
+  </div>
+
+  <div class="card" id="tab-settings">
+    <h3>App Settings & Customization</h3>
+    <p style="color: var(--border); margin-bottom: 15px; font-size: 14px;">Customize your app accent color:</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+      <button onclick="setAccentColor('#00bcd4')" style="width: 36px; height: 36px; border-radius: 50%; background: #00bcd4; border: none; cursor: pointer;"></button>
+      <button onclick="setAccentColor('#4caf50')" style="width: 36px; height: 36px; border-radius: 50%; background: #4caf50; border: none; cursor: pointer;"></button>
+      <button onclick="setAccentColor('#ff9800')" style="width: 36px; height: 36px; border-radius: 50%; background: #ff9800; border: none; cursor: pointer;"></button>
+      <button onclick="setAccentColor('#e91e63')" style="width: 36px; height: 36px; border-radius: 50%; background: #e91e63; border: none; cursor: pointer;"></button>
+      <button onclick="setAccentColor('#9c27b0')" style="width: 36px; height: 36px; border-radius: 50%; background: #9c27b0; border: none; cursor: pointer;"></button>
+    </div>
+    <button class="btn" onclick="localStorage.clear(); location.reload();" style="background: #f44336; color: white; width: 100%;">Reset All App Data</button>
   </div>
 
   <script src="app.logic.js"></script>
