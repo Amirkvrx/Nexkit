@@ -14,27 +14,16 @@
     <div style="display: flex; gap: 8px; align-items: center;">
       <select id="langSelector" onchange="setLanguage(this.value)" class="theme-btn" style="cursor: pointer; padding: 6px 10px;">
         <option value="en">English</option>
-        <option value="zh">中文</option>
-        <option value="es">Español</option>
-        <option value="hi">हिन्दी</option>
-        <option value="ar">العربية</option>
-        <option value="fr">Français</option>
-        <option value="pt">Português</option>
-        <option value="ru">Русский</option>
-        <option value="de">Deutsch</option>
-        <option value="ja">日本語</option>
-        <option value="tr">Türkçe</option>
         <option value="fa">فارسی</option>
       </select>
       <button class="theme-btn" onclick="toggleTheme()">🌙 / ☀️</button>
     </div>
   </div>
 
-  <!-- منوی تب‌ها -->
   <div class="nav-tabs">
     <button class="tab-btn" onclick="switchTab('calc', this)" data-i18n="calc">Calculator</button>
+    <button class="tab-btn" onclick="switchTab('loan', this)" data-i18n="loan">Loan Calc</button>
     <button class="tab-btn" onclick="switchTab('converter', this)" data-i18n="converter">Converter</button>
-    <button class="tab-btn" onclick="switchTab('conv-history', this)">History</button>
     <button class="tab-btn" onclick="switchTab('text', this)" data-i18n="text">Text</button>
     <button class="tab-btn" onclick="switchTab('notes', this)" data-i18n="notes">Notes</button>
     <button class="tab-btn" onclick="switchTab('todo', this)" data-i18n="todo">To-Do</button>
@@ -46,7 +35,6 @@
     <button class="tab-btn" onclick="switchTab('settings', this)" data-i18n="settings">Settings</button>
   </div>
 
-  <!-- تب ماشین حساب -->
   <div class="card" id="tab-calc">
     <h3 data-i18n="calc">Calculator</h3>
     <input type="text" class="input-field" id="screen" readonly>
@@ -70,7 +58,15 @@
     </div>
   </div>
 
-  <!-- تب مبدل‌ها -->
+  <div class="card" id="tab-loan">
+    <h3 data-i18n="loan">Loan Calculator</h3>
+    <input type="number" class="input-field" id="loanAmount" placeholder="Loan Amount ($)">
+    <input type="number" class="input-field" id="loanRate" placeholder="Annual Interest Rate (%)">
+    <input type="number" class="input-field" id="loanMonths" placeholder="Term (Months)">
+    <button class="btn btn-accent" onclick="calculateLoan()" style="width: 100%; margin-bottom: 12px;">Calculate</button>
+    <p id="loanResult" style="font-size: 14px; line-height: 1.6;"></p>
+  </div>
+
   <div class="card" id="tab-converter">
     <h3 data-i18n="converter">Length Converter</h3>
     <input type="number" class="input-field" id="cmInput" placeholder="Value in cm..." oninput="convertLength()">
@@ -90,26 +86,17 @@
     <p id="tempResult" style="font-family: monospace; color: var(--accent-cyan);">Result: -</p>
   </div>
 
-  <!-- تب تاریخچه مبدل‌ها -->
-  <div class="card" id="tab-conv-history">
-    <h3>Conversion History</h3>
-    <div id="conversionHistoryList" style="margin-top: 10px;">Loading history...</div>
-  </div>
-
-  <!-- تب شمارشگر متن -->
   <div class="card" id="tab-text">
     <h3 data-i18n="text">Text Counter</h3>
     <textarea class="input-field" id="textInput" placeholder="Enter text..." oninput="countText()"></textarea>
     <p id="textStats">Chars: 0 | Words: 0</p>
   </div>
 
-  <!-- تب یادداشت -->
   <div class="card" id="tab-notes">
     <h3 data-i18n="notes">Quick Notes</h3>
     <textarea class="input-field" id="noteInput" placeholder="Write your note..." oninput="saveNote()"></textarea>
   </div>
 
-  <!-- تب کارها -->
   <div class="card" id="tab-todo">
     <h3 data-i18n="todo">To-Do List</h3>
     <div style="display: flex; gap: 8px; margin-bottom: 12px;">
@@ -119,45 +106,38 @@
     <div id="taskList"></div>
   </div>
 
-  <!-- تب ساعت جهانی -->
   <div class="card" id="tab-clock">
     <h3 data-i18n="clock">World Clock</h3>
     <div id="worldClockList" style="margin-top: 10px;">Loading clocks...</div>
   </div>
 
-  <!-- تب تولید رمز -->
   <div class="card" id="tab-pass">
     <h3 data-i18n="pass">Password Generator</h3>
     <div class="pass-output" id="passOutput">Secure Password</div>
     <button class="btn btn-accent" onclick="generatePassword()" data-i18n="genPassBtn">Generate New</button>
-    <div id="passHistoryList" style="margin-top: 15px; font-size: 13px;"></div>
   </div>
 
-  <!-- تب QR Code -->
   <div class="card" id="tab-qr">
     <h3 data-i18n="qr">QR Code Generator</h3>
     <input type="text" class="input-field" id="qrInput" placeholder="Link or text..." oninput="generateQR()">
     <div id="qrcode" style="margin-top: 10px; display: flex; justify-content: center;"></div>
   </div>
 
-  <!-- تب چراغ‌قوه -->
   <div class="card" id="tab-torch" style="text-align: center;">
     <h3 data-i18n="torch">Flashlight</h3>
-    <p style="color: var(--border); margin-bottom: 15px; font-size: 14px;">Turns your screen into a bright white light source.</p>
+    <p style="color: var(--border); margin-bottom: 15px; font-size: 14px;">Turns screen into bright light.</p>
     <button class="btn btn-accent" onclick="toggleScreenTorch()" style="padding: 14px 28px; font-size: 16px;">💡 Turn On Light</button>
   </div>
 
-  <!-- تب GPS -->
   <div class="card" id="tab-gps" style="text-align: center;">
     <h3 data-i18n="gps">GPS Location</h3>
     <p id="gps-info" style="margin-bottom: 15px; font-size: 14px;">Location not received yet.</p>
     <button class="btn btn-accent" onclick="getLocation()" data-i18n="getGpsBtn">Get GPS Location</button>
   </div>
 
-  <!-- تب تنظیمات -->
   <div class="card" id="tab-settings">
     <h3 data-i18n="settings">Settings</h3>
-    <p style="color: var(--border); margin-bottom: 12px; font-size: 14px;">App Accent Color:</p>
+    <p style="color: var(--border); margin-bottom: 8px; font-size: 14px;">App Accent Color:</p>
     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
       <button onclick="setAccentColor('#00bcd4')" style="width: 36px; height: 36px; border-radius: 50%; background: #00bcd4; border: none; cursor: pointer;"></button>
       <button onclick="setAccentColor('#4caf50')" style="width: 36px; height: 36px; border-radius: 50%; background: #4caf50; border: none; cursor: pointer;"></button>
@@ -165,6 +145,14 @@
       <button onclick="setAccentColor('#e91e63')" style="width: 36px; height: 36px; border-radius: 50%; background: #e91e63; border: none; cursor: pointer;"></button>
       <button onclick="setAccentColor('#9c27b0')" style="width: 36px; height: 36px; border-radius: 50%; background: #9c27b0; border: none; cursor: pointer;"></button>
     </div>
+
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+
+    <h3 data-i18n="backup">Backup & Restore</h3>
+    <button class="btn btn-accent" onclick="exportBackup()" style="width: 100%; margin-bottom: 10px;">Export Data Backup</button>
+    <input type="file" id="importFile" onchange="importBackup(event)" style="display: none;">
+    <button class="btn" onclick="document.getElementById('importFile').click()" style="width: 100%; margin-bottom: 20px;">Restore Data Backup</button>
+
     <button class="btn" onclick="localStorage.clear(); location.reload();" style="background: #f44336; color: white; width: 100%;">Reset All App Data</button>
   </div>
 
