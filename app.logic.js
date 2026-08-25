@@ -261,3 +261,38 @@ function filterTools(query) {
     btn.style.display = isMatch ? 'inline-block' : 'none';
   });
 }
+
+// --- ابزار انتخاب رنگ و پالت‌ساز ---
+function updateColorTool(hex) {
+  document.getElementById('colorPreview').style.backgroundColor = hex;
+  document.getElementById('hexCode').value = hex;
+  
+  // تبدیل HEX به RGB
+  let r = parseInt(hex.slice(1,3), 16);
+  let g = parseInt(hex.slice(3,5), 16);
+  let b = parseInt(hex.slice(5,7), 16);
+  document.getElementById('rgbCode').value = `rgb(${r}, ${g}, ${b})`;
+}
+
+function generateRandomPalette() {
+  const container = document.getElementById('paletteContainer');
+  container.innerHTML = '';
+  
+  for (let i = 0; i < 5; i++) {
+    const randomHex = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+    const box = document.createElement('div');
+    box.style.cssText = `flex: 1; height: 60px; background: ${randomHex}; border-radius: 6px; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; font-size: 10px; font-family: monospace; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8);`;
+    box.innerText = randomHex;
+    box.onclick = () => {
+      navigator.clipboard.writeText(randomHex);
+      alert(`Copied ${randomHex} to clipboard!`);
+    };
+    container.appendChild(box);
+  }
+}
+
+// افزودن کلید ترجمه ابزار رنگ به شیء translations
+if (typeof translations !== 'undefined') {
+  if (translations.en) translations.en.colorTool = "Color Tools";
+  if (translations.fa) translations.fa.colorTool = "ابزار رنگ";
+}
