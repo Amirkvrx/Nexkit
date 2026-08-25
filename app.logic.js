@@ -2,20 +2,18 @@
 
 const translations = {
   en: {
-    level: "Digital Level", compass: "Digital Compass", calc: "Calculator", loan: "Loan Calc",
-    json: "JSON Tools", bmi: "BMI Calc", converter: "Length Converter", tempConverter: "Temperature Converter",
-    text: "Text Counter", crypto: "Hash & Base64", timer: "Timer", notes: "Quick Notes", todo: "To-Do List",
-    clock: "World Clock", pass: "Password Generator", qr: "QR Code", torch: "Flashlight",
-    gps: "GPS Location", settings: "Settings", backup: "Backup Data", addTaskBtn: "Add",
-    genPassBtn: "Generate New", getGpsBtn: "Get GPS Location"
+    calc: "Calculator", loan: "Loan Calc", bmi: "BMI Calc", json: "JSON Tools",
+    crypto: "Base64", imgTool: "Image Converter", textDiff: "Text Diff", caseConv: "Case Converter",
+    timer: "Timer", converter: "Length Converter", tempConverter: "Temp Converter",
+    text: "Text Counter", notes: "Quick Notes", todo: "To-Do List", clock: "World Clock",
+    pass: "Password Gen", qr: "QR Code", torch: "Flashlight", gps: "GPS", settings: "Settings"
   },
   fa: {
-    level: "تراز دیجیتال", compass: "قطب‌نما", calc: "ماشین حساب", loan: "محاسبه وام",
-    json: "ابزار JSON", bmi: "شاخص BMI", converter: "مبدل طول", tempConverter: "مبدل دما",
-    text: "شمارشگر متن", crypto: "هش و کدگذاری", timer: "تایمر", notes: "یادداشت سریع", todo: "کارهای روزمره",
-    clock: "ساعت جهانی", pass: "تولید رمز عبور", qr: "بارکد QR", torch: "چراغ‌قوه صفحه",
-    gps: "موقعیت‌یاب GPS", settings: "تنظیمات", backup: "پشتیبان‌گیری", addTaskBtn: "افزودن",
-    genPassBtn: "تولید جدید", getGpsBtn: "دریافت موقعیت"
+    calc: "ماشین حساب", loan: "محاسبه وام", bmi: "شاخص BMI", json: "ابزار JSON",
+    crypto: "هش و کدگذاری", imgTool: "تبدیل و فشرده‌ساز عکس", textDiff: "مقایسه دو متن", caseConv: "تغییر فرمت حروف",
+    timer: "تایمر", converter: "مبدل طول", tempConverter: "مبدل دما",
+    text: "شمارشگر متن", notes: "یادداشت سریع", todo: "کارهای روزمره", clock: "ساعت جهانی",
+    pass: "تولید رمز عبور", qr: "بارکد QR", torch: "چراغ‌قوه صفحه", gps: "موقعیت‌یافتن", settings: "تنظیمات"
   }
 };
 
@@ -29,9 +27,7 @@ function setLanguage(lang) {
   
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (translations[currentLang]?.[key]) {
-      el.innerText = translations[currentLang][key];
-    }
+    if (translations[currentLang]?.[key]) el.innerText = translations[currentLang][key];
   });
 }
 
@@ -52,299 +48,138 @@ function toggleTheme() {
   localStorage.setItem('nexkit_theme', isLight ? 'light' : 'dark');
 }
 
-// ماشین حساب پایه
+// سیستم جستجوی سریع ابزارها
+function filterTools(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.nav-tabs .tab-btn').forEach(btn => {
+    const text = btn.innerText.toLowerCase();
+    btn.style.display = text.includes(q) ? 'inline-block' : 'none';
+  });
+}
+
+// میانبر کیبورد (Ctrl + K)
+window.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    const searchInput = document.getElementById('quickSearch');
+    if (searchInput) searchInput.focus();
+  }
+});
+
+// فشرده‌سازی و تبدیل فرمت تصاویر (آفلاین)
+function processImage() {
+  const fileInput = document.getElementById('imgInput');
+  const quality = parseFloat(document.getElementById('imgQuality').value);
+  const format = document.getElementById('imgFormat').value;
+  const outputDiv = document.getElementById('imgOutput');
+  
+  if (!fileInput.files[0]) {
+    outputDiv.innerText = "Please select an image file.";
+    return;
+  }
+  
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+  
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      
+      const convertedUrl = canvas.toDataURL(format, quality);
+      outputDiv.innerHTML = `
+        <p style="font-size: 13px; color: var(--accent-cyan);">Processed successfully!</p>
+        <img src="${convertedUrl}" style="max-width: 100%; border-radius: 8px; margin: 10px 0; border: 1px solid var(--border);">
+        <br>
+        <a href="${convertedUrl}" download="converted_image.${format.split('/')[1]}" class="btn btn-accent" style="display: inline-block; text-decoration: none; text-align: center;">Download Processed Image</a>
+      `;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// مقایسه متن (Text Diff Checker)
+function compareTexts() {
+  const t1 = document.getElementById('diffText1').value.split('\n');
+  const t2 = document.getElementById('diffText2').value.split('\n');
+  const resultEl = document.getElementById('diffResult');
+  
+  let output = '';
+  const maxLines = Math.max(t1.length, t2.length);
+  
+  for (let i = 0; i < maxLines; i++) {
+    const line1 = t1[i] || '';
+    const line2 = t2[i] || '';
+    
+    if (line1 === line2) {
+      output += `<div>Line ${i+1}: ${line1}</div>`;
+    } else {
+      if (line1) output += `<div class="diff-removed">- Line ${i+1}: ${line1}</div>`;
+      if (line2) output += `<div class="diff-added">+ Line ${i+1}: ${line2}</div>`;
+    }
+  }
+  resultEl.innerHTML = output || "No differences found.";
+}
+
+// تبدیل حالت حروف (Case Converter)
+function convertCase(type) {
+  const input = document.getElementById('caseInput');
+  let val = input.value;
+  
+  if (type === 'upper') val = val.toUpperCase();
+  else if (type === 'lower') val = val.toLowerCase();
+  else if (type === 'title') {
+    val = val.toLowerCase().replace(/(?:^|\s)\w/g, match => match.toUpperCase());
+  } else if (type === 'camel') {
+    val = val.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+  }
+  input.value = val;
+}
+
+// سایر ابزارها
 function press(val) { document.getElementById('screen').value += val; }
 function clearCalc() { document.getElementById('screen').value = ''; }
 function calculate() {
-  try {
-    let res = eval(document.getElementById('screen').value);
-    document.getElementById('screen').value = res;
-  } catch (e) {
-    document.getElementById('screen').value = 'Error';
-  }
+  try { document.getElementById('screen').value = eval(document.getElementById('screen').value); }
+  catch (e) { document.getElementById('screen').value = 'Error'; }
 }
 
-// ابزار JSON Formatter & Validator
 function formatJSON() {
-  const input = document.getElementById('jsonInput').value;
-  const output = document.getElementById('jsonOutput');
   try {
-    const parsed = JSON.parse(input);
-    output.innerText = JSON.stringify(parsed, null, 2);
-    output.style.color = 'var(--text)';
-  } catch (e) {
-    output.innerText = "Invalid JSON: " + e.message;
-    output.style.color = '#ff5252';
-  }
+    document.getElementById('jsonOutput').innerText = JSON.stringify(JSON.parse(document.getElementById('jsonInput').value), null, 2);
+  } catch (e) { document.getElementById('jsonOutput').innerText = "Invalid JSON"; }
 }
 
-function minifyJSON() {
-  const input = document.getElementById('jsonInput').value;
-  const output = document.getElementById('jsonOutput');
-  try {
-    const parsed = JSON.parse(input);
-    output.innerText = JSON.stringify(parsed);
-    output.style.color = 'var(--text)';
-  } catch (e) {
-    output.innerText = "Invalid JSON: " + e.message;
-    output.style.color = '#ff5252';
-  }
-}
-
-// محاسبه BMI
 function calculateBMI() {
-  const weight = parseFloat(document.getElementById('bmiWeight').value);
-  const heightCm = parseFloat(document.getElementById('bmiHeight').value);
-  const resultEl = document.getElementById('bmiResult');
-  
-  if (isNaN(weight) || isNaN(heightCm) || heightCm <= 0 || weight <= 0) {
-    resultEl.innerText = "Please enter valid numbers.";
-    return;
-  }
-  
-  const heightM = heightCm / 100;
-  const bmi = (weight / (heightM * heightM)).toFixed(1);
-  let status = "";
-  
-  if (bmi < 18.5) status = "Underweight";
-  else if (bmi < 24.9) status = "Normal weight";
-  else if (bmi < 29.9) status = "Overweight";
-  else status = "Obesity";
-  
-  resultEl.innerHTML = `BMI: <strong>${bmi}</strong> (${status})`;
+  const w = parseFloat(document.getElementById('bmiWeight').value);
+  const h = parseFloat(document.getElementById('bmiHeight').value) / 100;
+  if (!w || !h) return;
+  const bmi = (w / (h * h)).toFixed(1);
+  document.getElementById('bmiResult').innerHTML = `BMI: <strong>${bmi}</strong>`;
 }
 
-// محاسبه اقساط وام
-function calculateLoan() {
-  const amount = parseFloat(document.getElementById('loanAmount').value);
-  const rate = parseFloat(document.getElementById('loanRate').value) / 100 / 12;
-  const months = parseFloat(document.getElementById('loanMonths').value);
-  
-  if (isNaN(amount) || isNaN(rate) || isNaN(months) || months <= 0) {
-    document.getElementById('loanResult').innerText = "Please enter valid numbers.";
-    return;
-  }
-  
-  const x = Math.pow(1 + rate, months);
-  const monthly = (amount * x * rate) / (x - 1);
-  const totalPayment = monthly * months;
-  
-  document.getElementById('loanResult').innerHTML = `
-    Monthly: <strong>${monthly.toFixed(2)}</strong><br>
-    Total Pay: <strong>${totalPayment.toFixed(2)}</strong>
-  `;
-}
-
-// هش و کدگذاری Base64
 function encodeBase64() {
-  const str = document.getElementById('cryptoInput').value;
-  try {
-    document.getElementById('cryptoOutput').innerText = btoa(unescape(encodeURIComponent(str)));
-  } catch(e) {
-    document.getElementById('cryptoOutput').innerText = "Encoding Error";
-  }
+  try { document.getElementById('cryptoOutput').innerText = btoa(unescape(encodeURIComponent(document.getElementById('cryptoInput').value))); }
+  catch(e) { document.getElementById('cryptoOutput').innerText = "Error"; }
 }
 
 function decodeBase64() {
-  const str = document.getElementById('cryptoInput').value;
-  try {
-    document.getElementById('cryptoOutput').innerText = decodeURIComponent(escape(atob(str)));
-  } catch(e) {
-    document.getElementById('cryptoOutput').innerText = "Invalid Base64 string";
-  }
+  try { document.getElementById('cryptoOutput').innerText = decodeURIComponent(escape(atob(document.getElementById('cryptoInput').value))); }
+  catch(e) { document.getElementById('cryptoOutput').innerText = "Error"; }
 }
 
-// تایمر
-let timerInterval = null;
-function startTimer() {
-  let sec = parseInt(document.getElementById('timerSeconds').value);
-  if (isNaN(sec) || sec <= 0) return;
-  clearInterval(timerInterval);
-  
-  const display = document.getElementById('timerDisplay');
-  timerInterval = setInterval(() => {
-    sec--;
-    display.innerText = `${sec}s remaining...`;
-    if (sec <= 0) {
-      clearInterval(timerInterval);
-      display.innerText = "⏰ Time's up!";
-      if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
-    }
-  }, 1000);
-}
-
-// مبدل‌ها
-function convertLength() {
-  const cm = parseFloat(document.getElementById('cmInput').value);
-  const res = isNaN(cm) ? 0 : (cm / 2.54).toFixed(2);
-  document.getElementById('inchResult').innerText = `Result: ${res} inches`;
-}
-
-function convertTemp() {
-  const val = parseFloat(document.getElementById('tempInput').value);
-  const unit = document.getElementById('tempUnit').value;
-  const resultEl = document.getElementById('tempResult');
-  
-  if (isNaN(val)) { resultEl.innerText = "Result: -"; return; }
-  
-  let c = 0, f = 0, k = 0;
-  if (unit === 'C') { c = val; f = (val * 9/5) + 32; k = val + 273.15; }
-  else if (unit === 'F') { c = (val - 32) * 5/9; f = val; k = c + 273.15; }
-  else if (unit === 'K') { c = val - 273.15; f = (c * 9/5) + 32; k = val; }
-  
-  resultEl.innerText = `${c.toFixed(1)}°C | ${f.toFixed(1)}°F | ${k.toFixed(2)}K`;
-}
-
-// شمارشگر متن
-function countText() {
-  const text = document.getElementById('textInput').value;
-  const chars = text.length;
-  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-  document.getElementById('textStats').innerText = `Chars: ${chars} | Words: ${words}`;
-}
-
-// یادداشت سریع
-function saveNote() {
-  localStorage.setItem('nexkit_quick_note', document.getElementById('noteInput').value);
-}
-
-// مدیریت کارها (To-Do)
-let tasks = JSON.parse(localStorage.getItem('nexkit_tasks') || '[]');
-function addTask() {
-  const input = document.getElementById('taskInput');
-  if (!input.value.trim()) return;
-  tasks.push({ text: input.value, done: false });
-  input.value = '';
-  saveAndRenderTasks();
-}
-function toggleTask(i) { tasks[i].done = !tasks[i].done; saveAndRenderTasks(); }
-function deleteTask(i) { tasks.splice(i, 1); saveAndRenderTasks(); }
-function saveAndRenderTasks() {
-  localStorage.setItem('nexkit_tasks', JSON.stringify(tasks));
-  const listEl = document.getElementById('taskList');
-  if (!listEl) return;
-  if (tasks.length === 0) { listEl.innerHTML = '<p style="color: var(--border); text-align: center; font-size: 13px;">No tasks yet.</p>'; return; }
-  listEl.innerHTML = tasks.map((t, i) => `
-    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; border: 1px solid var(--border);">
-      <span onclick="toggleTask(${i})" style="cursor: pointer; text-decoration: ${t.done ? 'line-through' : 'none'}; color: ${t.done ? 'var(--border)' : 'inherit'}; font-size: 14px;">${t.text}</span>
-      <button onclick="deleteTask(${i})" style="background: transparent; border: none; color: #ff5252; cursor: pointer; font-size: 16px;">×</button>
-    </div>
-  `).join('');
-}
-
-// ساعت جهانی
-function updateWorldClocks() {
-  const container = document.getElementById('worldClockList');
-  if (!container) return;
-  const zones = [
-    { name: 'UTC / London', tz: 'UTC' },
-    { name: 'New York', tz: 'America/New_York' },
-    { name: 'Tehran', tz: 'Asia/Tehran' },
-    { name: 'Tokyo', tz: 'Asia/Tokyo' }
-  ];
-  const now = new Date();
-  container.innerHTML = zones.map(z => {
-    try {
-      const timeStr = now.toLocaleTimeString('en-US', { timeZone: z.tz, hour12: false });
-      return `<div style="display: flex; justify-content: space-between; background: var(--bg); padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; font-size: 14px; border: 1px solid var(--border);"><span>${z.name}</span><strong style="font-family: monospace;">${timeStr}</strong></div>`;
-    } catch (e) { return ''; }
-  }).join('');
-}
-setInterval(updateWorldClocks, 1000);
-
-// پشتیبان‌گیری
-function exportBackup() {
-  const data = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.startsWith('nexkit_')) data[key] = localStorage.getItem(key);
-  }
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `nexkit_backup_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-}
-
-function importBackup(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const data = JSON.parse(e.target.result);
-      Object.keys(data).forEach(k => {
-        if (k.startsWith('nexkit_')) localStorage.setItem(k, data[k]);
-      });
-      alert('Backup restored successfully!');
-      location.reload();
-    } catch (err) { alert('Invalid JSON file.'); }
-  };
-  reader.readAsText(file);
-}
-
-// تولید رمز عبور
-function generatePassword() {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*!";
-  let pass = "";
-  for (let i = 0; i < 12; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
-  document.getElementById('passOutput').innerText = pass;
-}
-
-// QR Code
-function generateQR() {
-  const val = document.getElementById('qrInput').value;
-  const container = document.getElementById('qrcode');
-  if (!container) return;
-  container.innerHTML = "";
-  if (val.trim()) new QRCode(container, { text: val, width: 128, height: 128 });
-}
-
-// چراغ‌قوه
-function toggleScreenTorch() {
-  let overlay = document.getElementById('torchOverlay');
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.id = 'torchOverlay';
-    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; cursor: pointer;';
-    overlay.innerHTML = '<span style="color: black; font-weight: bold; font-size: 18px;">Tap to exit</span>';
-    overlay.onclick = () => overlay.remove();
-    document.body.appendChild(overlay);
-  } else { overlay.remove(); }
-}
-
-// GPS
-function getLocation() {
-  const info = document.getElementById('gps-info');
-  if (!navigator.geolocation) { info.innerText = "Geolocation not supported"; return; }
-  info.innerText = "Locating...";
-  navigator.geolocation.getCurrentPosition(
-    p => info.innerText = `Lat: ${p.coords.latitude.toFixed(4)}, Lon: ${p.coords.longitude.toFixed(4)}`,
-    () => info.innerText = "Unable to retrieve location"
-  );
-}
-
-function setAccentColor(color) {
-  document.documentElement.style.setProperty('--accent', color);
-  document.documentElement.style.setProperty('--accent-cyan', color);
-  localStorage.setItem('nexkit_accent', color);
-}
-
+// آماده‌سازی اولیه
 window.addEventListener('DOMContentLoaded', () => {
   const savedLang = localStorage.getItem('nexkit_lang') || 'en';
   setLanguage(savedLang);
   document.getElementById('langSelector').value = savedLang;
   
-  const accent = localStorage.getItem('nexkit_accent');
-  if (accent) setAccentColor(accent);
-  
   if (localStorage.getItem('nexkit_theme') === 'light') document.body.classList.add('light-theme');
-  
-  const note = localStorage.getItem('nexkit_quick_note');
-  if (note) document.getElementById('noteInput').value = note;
-  
-  saveAndRenderTasks();
-  updateWorldClocks();
   
   const activeTab = localStorage.getItem('nexkit_active_tab') || 'calc';
   const defaultBtn = document.querySelector(`.tab-btn[onclick*="${activeTab}"]`);

@@ -20,12 +20,19 @@
     </div>
   </div>
 
+  <div class="search-container">
+    <input type="text" id="quickSearch" class="search-input" placeholder="🔍 Quick search tools... (Ctrl + K)" oninput="filterTools(this.value)">
+  </div>
+
   <div class="nav-tabs">
     <button class="tab-btn" onclick="switchTab('calc', this)" data-i18n="calc">Calculator</button>
-    <button class="tab-btn" onclick="switchTab('loan', this)" data-i18n="loan">Loan Calc</button>
-    <button class="tab-btn" onclick="switchTab('bmi', this)" data-i18n="bmi">BMI Calc</button>
+    <button class="tab-btn" onclick="switchTab('imgTool', this)" data-i18n="imgTool">Image Converter</button>
+    <button class="tab-btn" onclick="switchTab('textDiff', this)" data-i18n="textDiff">Text Diff</button>
+    <button class="tab-btn" onclick="switchTab('caseConv', this)" data-i18n="caseConv">Case Converter</button>
     <button class="tab-btn" onclick="switchTab('json', this)" data-i18n="json">JSON Tools</button>
+    <button class="tab-btn" onclick="switchTab('bmi', this)" data-i18n="bmi">BMI Calc</button>
     <button class="tab-btn" onclick="switchTab('crypto', this)" data-i18n="crypto">Base64</button>
+    <button class="tab-btn" onclick="switchTab('loan', this)" data-i18n="loan">Loan Calc</button>
     <button class="tab-btn" onclick="switchTab('timer', this)" data-i18n="timer">Timer</button>
     <button class="tab-btn" onclick="switchTab('converter', this)" data-i18n="converter">Converter</button>
     <button class="tab-btn" onclick="switchTab('text', this)" data-i18n="text">Text</button>
@@ -37,6 +44,47 @@
     <button class="tab-btn" onclick="switchTab('torch', this)" data-i18n="torch">Flashlight</button>
     <button class="tab-btn" onclick="switchTab('gps', this)" data-i18n="gps">GPS</button>
     <button class="tab-btn" onclick="switchTab('settings', this)" data-i18n="settings">Settings</button>
+  </div>
+
+  <!-- ابزار فشرده‌سازی و تبدیل تصویر -->
+  <div class="card" id="tab-imgTool">
+    <h3 data-i18n="imgTool">Image Converter & Compressor</h3>
+    <input type="file" id="imgInput" accept="image/*" class="input-field">
+    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+      <select id="imgFormat" class="theme-btn" style="flex: 1; padding: 10px;">
+        <option value="image/webp">WEBP</option>
+        <option value="image/jpeg">JPG</option>
+        <option value="image/png">PNG</option>
+      </select>
+      <select id="imgQuality" class="theme-btn" style="flex: 1; padding: 10px;">
+        <option value="0.9">High Quality (90%)</option>
+        <option value="0.7">Medium Quality (70%)</option>
+        <option value="0.5">Low Quality (50%)</option>
+      </select>
+    </div>
+    <button class="btn btn-accent" onclick="processImage()" style="width: 100%; margin-bottom: 12px;">Process Image</button>
+    <div id="imgOutput" style="text-align: center;"></div>
+  </div>
+
+  <!-- ابزار مقایسه متن -->
+  <div class="card" id="tab-textDiff">
+    <h3 data-i18n="textDiff">Text Diff Checker</h3>
+    <textarea class="input-field" id="diffText1" placeholder="Original text..." style="min-height: 70px;"></textarea>
+    <textarea class="input-field" id="diffText2" placeholder="Modified text..." style="min-height: 70px;"></textarea>
+    <button class="btn btn-accent" onclick="compareTexts()" style="width: 100%; margin-bottom: 12px;">Compare Texts</button>
+    <div id="diffResult" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-family: monospace; font-size: 12px; overflow-x: auto;"></div>
+  </div>
+
+  <!-- ابزار تغییر حالت حروف -->
+  <div class="card" id="tab-caseConv">
+    <h3 data-i18n="caseConv">Text Case Converter</h3>
+    <textarea class="input-field" id="caseInput" placeholder="Enter text to convert case..." style="min-height: 90px;"></textarea>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+      <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
+      <button class="btn" onclick="convertCase('lower')">lowercase</button>
+      <button class="btn" onclick="convertCase('title')">Title Case</button>
+      <button class="btn" onclick="convertCase('camel')">camelCase</button>
+    </div>
   </div>
 
   <div class="card" id="tab-calc">
@@ -62,13 +110,11 @@
     </div>
   </div>
 
-  <div class="card" id="tab-loan">
-    <h3 data-i18n="loan">Loan Calculator</h3>
-    <input type="number" class="input-field" id="loanAmount" placeholder="Loan Amount ($)">
-    <input type="number" class="input-field" id="loanRate" placeholder="Annual Interest Rate (%)">
-    <input type="number" class="input-field" id="loanMonths" placeholder="Term (Months)">
-    <button class="btn btn-accent" onclick="calculateLoan()" style="width: 100%; margin-bottom: 12px;">Calculate</button>
-    <p id="loanResult" style="font-size: 14px; line-height: 1.6;"></p>
+  <div class="card" id="tab-json">
+    <h3 data-i18n="json">JSON Formatter</h3>
+    <textarea class="input-field" id="jsonInput" placeholder="Paste unformatted JSON..."></textarea>
+    <button class="btn btn-accent" onclick="formatJSON()" style="width: 100%; margin-bottom: 12px;">Format JSON</button>
+    <pre id="jsonOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; overflow-x: auto;"></pre>
   </div>
 
   <div class="card" id="tab-bmi">
@@ -76,123 +122,17 @@
     <input type="number" class="input-field" id="bmiWeight" placeholder="Weight (kg)">
     <input type="number" class="input-field" id="bmiHeight" placeholder="Height (cm)">
     <button class="btn btn-accent" onclick="calculateBMI()" style="width: 100%; margin-bottom: 12px;">Calculate BMI</button>
-    <p id="bmiResult" style="font-size: 15px;"></p>
-  </div>
-
-  <div class="card" id="tab-json">
-    <h3 data-i18n="json">JSON Formatter & Validator</h3>
-    <textarea class="input-field" id="jsonInput" placeholder="Paste unformatted JSON here..." style="min-height: 100px;"></textarea>
-    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-      <button class="btn btn-accent" onclick="formatJSON()" style="flex: 1;">Format (Prettify)</button>
-      <button class="btn" onclick="minifyJSON()" style="flex: 1;">Minify</button>
-    </div>
-    <pre id="jsonOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); overflow-x: auto; font-size: 12px; min-height: 60px;">Output will appear here...</pre>
+    <p id="bmiResult"></p>
   </div>
 
   <div class="card" id="tab-crypto">
     <h3 data-i18n="crypto">Base64 Encoder / Decoder</h3>
-    <textarea class="input-field" id="cryptoInput" placeholder="Enter text to encode or decode..."></textarea>
+    <textarea class="input-field" id="cryptoInput" placeholder="Enter text..."></textarea>
     <div style="display: flex; gap: 8px; margin-bottom: 12px;">
       <button class="btn btn-accent" onclick="encodeBase64()" style="flex: 1;">Encode</button>
       <button class="btn" onclick="decodeBase64()" style="flex: 1;">Decode</button>
     </div>
-    <p id="cryptoOutput" style="font-family: monospace; background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); word-break: break-all; min-height: 40px;">Output will appear here...</p>
-  </div>
-
-  <div class="card" id="tab-timer">
-    <h3 data-i18n="timer">Timer & Reminder</h3>
-    <input type="number" class="input-field" id="timerSeconds" placeholder="Seconds (e.g. 60)">
-    <button class="btn btn-accent" onclick="startTimer()" style="width: 100%; margin-bottom: 15px;">Start Timer</button>
-    <h2 id="timerDisplay" style="text-align: center; color: var(--accent-cyan); font-family: monospace;">0s</h2>
-  </div>
-
-  <div class="card" id="tab-converter">
-    <h3 data-i18n="converter">Length Converter</h3>
-    <input type="number" class="input-field" id="cmInput" placeholder="Value in cm..." oninput="convertLength()">
-    <p id="inchResult" style="margin-bottom: 20px;">Result: 0 inches</p>
-    
-    <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
-    
-    <h3 data-i18n="tempConverter">Temperature Converter</h3>
-    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-      <input type="number" class="input-field" id="tempInput" placeholder="Value..." oninput="convertTemp()" style="margin-bottom: 0;">
-      <select id="tempUnit" onchange="convertTemp()" class="theme-btn" style="cursor: pointer; padding: 0 10px;">
-        <option value="C">°C</option>
-        <option value="F">°F</option>
-        <option value="K">K</option>
-      </select>
-    </div>
-    <p id="tempResult" style="font-family: monospace; color: var(--accent-cyan);">Result: -</p>
-  </div>
-
-  <div class="card" id="tab-text">
-    <h3 data-i18n="text">Text Counter</h3>
-    <textarea class="input-field" id="textInput" placeholder="Enter text..." oninput="countText()"></textarea>
-    <p id="textStats">Chars: 0 | Words: 0</p>
-  </div>
-
-  <div class="card" id="tab-notes">
-    <h3 data-i18n="notes">Quick Notes</h3>
-    <textarea class="input-field" id="noteInput" placeholder="Write your note..." oninput="saveNote()"></textarea>
-  </div>
-
-  <div class="card" id="tab-todo">
-    <h3 data-i18n="todo">To-Do List</h3>
-    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-      <input type="text" class="input-field" id="taskInput" placeholder="New task..." style="margin-bottom: 0;">
-      <button class="btn btn-accent" onclick="addTask()" style="width: 80px;" data-i18n="addTaskBtn">Add</button>
-    </div>
-    <div id="taskList"></div>
-  </div>
-
-  <div class="card" id="tab-clock">
-    <h3 data-i18n="clock">World Clock</h3>
-    <div id="worldClockList" style="margin-top: 10px;">Loading clocks...</div>
-  </div>
-
-  <div class="card" id="tab-pass">
-    <h3 data-i18n="pass">Password Generator</h3>
-    <div class="pass-output" id="passOutput">Secure Password</div>
-    <button class="btn btn-accent" onclick="generatePassword()" data-i18n="genPassBtn">Generate New</button>
-  </div>
-
-  <div class="card" id="tab-qr">
-    <h3 data-i18n="qr">QR Code Generator</h3>
-    <input type="text" class="input-field" id="qrInput" placeholder="Link or text..." oninput="generateQR()">
-    <div id="qrcode" style="margin-top: 10px; display: flex; justify-content: center;"></div>
-  </div>
-
-  <div class="card" id="tab-torch" style="text-align: center;">
-    <h3 data-i18n="torch">Flashlight</h3>
-    <p style="color: var(--border); margin-bottom: 15px; font-size: 14px;">Turns screen into bright light.</p>
-    <button class="btn btn-accent" onclick="toggleScreenTorch()" style="padding: 14px 28px; font-size: 16px;">💡 Turn On Light</button>
-  </div>
-
-  <div class="card" id="tab-gps" style="text-align: center;">
-    <h3 data-i18n="gps">GPS Location</h3>
-    <p id="gps-info" style="margin-bottom: 15px; font-size: 14px;">Location not received yet.</p>
-    <button class="btn btn-accent" onclick="getLocation()" data-i18n="getGpsBtn">Get GPS Location</button>
-  </div>
-
-  <div class="card" id="tab-settings">
-    <h3 data-i18n="settings">Settings</h3>
-    <p style="color: var(--border); margin-bottom: 8px; font-size: 14px;">App Accent Color:</p>
-    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-      <button onclick="setAccentColor('#00bcd4')" style="width: 36px; height: 36px; border-radius: 50%; background: #00bcd4; border: none; cursor: pointer;"></button>
-      <button onclick="setAccentColor('#4caf50')" style="width: 36px; height: 36px; border-radius: 50%; background: #4caf50; border: none; cursor: pointer;"></button>
-      <button onclick="setAccentColor('#ff9800')" style="width: 36px; height: 36px; border-radius: 50%; background: #ff9800; border: none; cursor: pointer;"></button>
-      <button onclick="setAccentColor('#e91e63')" style="width: 36px; height: 36px; border-radius: 50%; background: #e91e63; border: none; cursor: pointer;"></button>
-      <button onclick="setAccentColor('#9c27b0')" style="width: 36px; height: 36px; border-radius: 50%; background: #9c27b0; border: none; cursor: pointer;"></button>
-    </div>
-
-    <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
-
-    <h3 data-i18n="backup">Backup & Restore</h3>
-    <button class="btn btn-accent" onclick="exportBackup()" style="width: 100%; margin-bottom: 10px;">Export Data Backup</button>
-    <input type="file" id="importFile" onchange="importBackup(event)" style="display: none;">
-    <button class="btn" onclick="document.getElementById('importFile').click()" style="width: 100%; margin-bottom: 20px;">Restore Data Backup</button>
-
-    <button class="btn" onclick="localStorage.clear(); location.reload();" style="background: #f44336; color: white; width: 100%;">Reset All App Data</button>
+    <p id="cryptoOutput" style="font-family: monospace; background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); word-break: break-all;"></p>
   </div>
 
   <script src="app.logic.js"></script>

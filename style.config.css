@@ -176,3 +176,27 @@ textarea.input-field {
 #toast.show {
   transform: translateX(-50%) translateY(0);
 }
+
+/* Quick Search & Command Palette */
+.search-container {
+  padding: 10px 15px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 60px;
+  z-index: 90;
+}
+.search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Diff Output */
+.diff-added { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+.diff-removed { background: rgba(244, 67, 54, 0.2); color: #f44336; }
