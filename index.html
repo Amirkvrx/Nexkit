@@ -12,7 +12,6 @@
   <div class="header">
     <div class="logo">Nexkit</div>
     <div style="display: flex; gap: 8px; align-items: center;">
-      <!-- منوی زبان‌ها بر اساس میزان تقاضا و گویشوران جهانی -->
       <select id="langSelector" onchange="setLanguage(this.value)" class="theme-btn" style="cursor: pointer; padding: 6px 10px;">
         <option value="en">English</option>
         <option value="zh">中文</option>
@@ -89,7 +88,20 @@
   <div class="card" id="tab-converter">
     <h3 data-i18n="converter">Length Converter</h3>
     <input type="number" class="input-field" id="cmInput" placeholder="Value in cm..." oninput="convertLength()">
-    <p id="inchResult">Result: 0 inches</p>
+    <p id="inchResult" style="margin-bottom: 20px;">Result: 0 inches</p>
+    
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+    
+    <h3 data-i18n="tempConverter">Temperature Converter</h3>
+    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+      <input type="number" class="input-field" id="tempInput" placeholder="Value..." oninput="convertTemp()" style="margin-bottom: 0;">
+      <select id="tempUnit" onchange="convertTemp()" class="theme-btn" style="cursor: pointer; padding: 0 10px;">
+        <option value="C">°C</option>
+        <option value="F">°F</option>
+        <option value="K">K</option>
+      </select>
+    </div>
+    <p id="tempResult" style="font-family: monospace; color: var(--accent-cyan);">Result: -</p>
   </div>
 
   <div class="card" id="tab-text">

@@ -6,6 +6,7 @@ const translations = {
     compass: "Compass",
     calc: "Calculator",
     converter: "Converter",
+    tempConverter: "Temperature Converter",    tempResultDefault: "Result: -",
     text: "Text",
     notes: "Notes",
     todo: "To-Do",
@@ -42,6 +43,7 @@ const translations = {
     compass: "قطب‌نما",
     calc: "ماشین‌حساب",
     converter: "مبدل",
+    tempConverter: "مبدل دما",    tempResultDefault: "نتیجه: -",
     text: "متن",
     notes: "یادداشت",
     todo: "کارها",
@@ -340,3 +342,125 @@ function toggleScreenTorch() {
     overlay.remove();
   }
 }
+
+// مبدل دما
+function convertTemp() {
+  const val = parseFloat(document.getElementById('tempInput').value);
+  const unit = document.getElementById('tempUnit').value;
+  const resultEl = document.getElementById('tempResult');
+  
+  if (isNaN(val)) {
+    resultEl.innerText = t('tempResultDefault') || "Result: -";
+    return;
+  }
+  
+  let c = 0, f = 0, k = 0;
+  if (unit === 'C') {
+    c = val;
+    f = (val * 9/5) + 32;
+    k = val + 273.15;
+  } else if (unit === 'F') {
+    c = (val - 32) * 5/9;
+    f = val;
+    k = c + 273.15;
+  } else if (unit === 'K') {
+    c = val - 273.15;
+    f = (c * 9/5) + 32;
+    k = val;
+  }
+  
+  resultEl.innerText = `${c.toFixed(1)}°C | ${f.toFixed(1)}°F | ${k.toFixed(2)}K`;
+}
+
+// سیستم هوشمند تشخیص زبان و راه‌اندازی اولیه
+function detectUserLanguage() {
+  // بررسی اینکه آیا کاربر قبلاً زبان را انتخاب کرده است یا خیر
+  const savedLang = localStorage.getItem('nexkit_lang');
+  if (savedLang) {
+    return savedLang;
+  }
+
+  // دریافت زبان مرورگر یا سیستم
+  const sysLang = (navigator.language || navigator.userLanguage || 'en').substring(0, 2);
+  
+  // لیست زبان‌های پشتیبانی شده توسط اپ
+  const supportedLangs = ['en', 'zh', 'es', 'hi', 'ar', 'fr', 'pt', 'ru', 'de', 'ja', 'tr', 'fa'];
+  
+  if (supportedLangs.includes(sysLang)) {
+    return sysLang;
+  }
+  
+  return 'en'; // پیش‌فرض استاندارد جهانی
+}
+
+// نمایش پاپ‌آپ خوش‌آمدگویی و تنظیم زبان در اولین اجرا
+function checkFirstRunLanguage() {
+  const hasRunBefore = localStorage.getItem('nexkit_configured');
+  if (hasRunBefore) return;
+
+  const detected = detectUserLanguage();
+  const langNames = {
+    en: 'English', zh: '中文', es: 'Español', hi: 'हिन्दी', ar: 'العربية',
+    fr: 'Français', pt: 'Português', ru: 'Русский', de: 'Deutsch',
+    ja: '日本語', tr: 'Türkçe', fa: 'فارسی'
+  };
+
+  const detectedName = langNames[detected] || 'English';
+
+  // ساخت مدال استاندارد
+  const modal = document.createElement('div');
+  modal.id = 'langWelcomeModal';
+  modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 20px;';
+  
+  modal.innerHTML = `
+    <div style="background: var(--card-bg, #fff); color: var(--text, #333); padding: 24px; border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center;">
+      <h2 style="margin-bottom: 12px; font-size: 20px;">🌍 Language Preference / زبان برنامه</h2>
+      <p style="font-size: 14px; color: var(--border, #666); margin-bottom: 20px;">
+        We detected your system/location language as <b>${detectedName}</b>. Would you like to use Nexkit in this language or choose another?
+        <br><br>
+        زبان سیستم شما ${detectedName} تشخیص داده شد. مایلید برنامه با همین زبان ادامه پیدا کند؟
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button onclick="applyWelcomeLang('${detected}')" class="btn btn-accent" style="padding: 12px; font-weight: bold;">Continue with ${detectedName} / ادامه</button>
+        <button onclick="showFullLangSelector()" class="btn" style="padding: 10px; background: transparent; border: 1px solid var(--border); color: inherit;">Choose from all languages / انتخاب از لیست</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function applyWelcomeLang(lang) {
+  setLanguage(lang);
+  localStorage.setItem('nexkit_configured', 'true');
+  const modal = document.getElementById('langWelcomeModal');
+  if (modal) modal.remove();
+}
+
+function showFullLangSelector() {
+  const modalContent = document.querySelector('#langWelcomeModal > div');
+  modalContent.innerHTML = `
+    <h2 style="margin-bottom: 12px; font-size: 20px;">Select Language / انتخاب زبان</h2>
+    <select id="welcomeLangSelect" class="input-field" style="margin-bottom: 20px;">
+      <option value="en">English</option>
+      <option value="zh">中文</option>
+      <option value="es">Español</option>
+      <option value="hi">हिन्दी</option>
+      <option value="ar">العربية</option>
+      <option value="fr">Français</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="de">Deutsch</option>
+      <option value="ja">日本語</option>
+      <option value="tr">Türkçe</option>
+      <option value="fa">فارسی</option>
+    </select>
+    <button onclick="applyWelcomeLang(document.getElementById('welcomeLangSelect').value)" class="btn btn-accent" style="width: 100%; padding: 12px;">Confirm / تایید</button>
+  `;
+}
+
+// اجرا در زمان لود صفحه
+window.addEventListener('DOMContentLoaded', () => {
+  const initialLang = detectUserLanguage();
+  setLanguage(initialLang);
+  setTimeout(checkFirstRunLanguage, 500);
+});
