@@ -203,3 +203,61 @@ function saveHistory(toolName, resultText) {
   if (history.length > 15) history.pop(); // نگهداری ۱۵ مورد آخر
   localStorage.setItem('nexkit_history', JSON.stringify(history));
 }
+
+// تابع محاسبه فاصله لوون‌شتاین برای تشخیص خطاهای تایپی
+function getLevenshteinDistance(a, b) {
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) { matrix[i] = [i]; }
+  for (let j = 0; j <= a.length; j++) { matrix[0][j] = j; }
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1, // substitution
+          Math.min(
+            matrix[i][j - 1] + 1, // insertion
+            matrix[i - 1][j] + 1  // deletion
+          )
+        );
+      }
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+// سیستم جستجوی هوشمند فازی (مقاوم در برابر خطای تایپی)
+function filterTools(query) {
+  const q = query.toLowerCase().trim();
+  const buttons = document.querySelectorAll('.nav-tabs .tab-btn');
+  
+  if (!q) {
+    buttons.forEach(btn => btn.style.display = 'inline-block');
+    return;
+  }
+
+  buttons.forEach(btn => {
+    const text = btn.innerText.toLowerCase();
+    const words = text.split(/\s+/);
+    
+    let isMatch = false;
+    
+    // ۱. بررسی تطابق بخشی از کلمه یا شامل بودن
+    if (text.includes(q)) {
+      isMatch = true;
+    } else {
+      // ۲. بررسی خطای تایپی برای هر کلمه با توجه به طول آن
+      for (const word of words) {
+        const distance = getLevenshteinDistance(q, word);
+        // اگر خطای تایپی مجاز نسبت به طول کلمه کمتر یا مساوی ۲ باشد
+        if (distance <= 2 || (q.length > 3 && word.includes(q))) {
+          isMatch = true;
+          break;
+        }
+      }
+    }
+    
+    btn.style.display = isMatch ? 'inline-block' : 'none';
+  });
+}
