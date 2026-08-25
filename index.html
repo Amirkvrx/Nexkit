@@ -72,6 +72,7 @@
       <textarea class="input-field" id="diffText1" placeholder="Original text..." style="min-height: 60px;"></textarea>
       <textarea class="input-field" id="diffText2" placeholder="Modified text..." style="min-height: 60px;"></textarea>
       <button class="btn btn-accent" onclick="compareTexts()" style="width: 100%; margin-bottom: 12px;">Compare Texts</button>
+      <button class="btn" onclick="downloadAsFile('diffResult', 'diff-result.txt')" style="width: 100%; margin-bottom: 12px;">💾 Download Result</button>
       <div id="diffResult" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-family: monospace; font-size: 12px;"></div>
     </div>
     <div id="textDiff-guide" class="sub-pane" style="display:none;">
@@ -91,6 +92,7 @@
       <div style="display: flex; gap: 8px; margin-bottom: 12px;">
         <button class="btn btn-accent" onclick="formatJSON()" style="flex: 1;">Format</button>
         <button class="btn" onclick="minifyJSON()" style="flex: 1;">Minify</button>
+        <button class="btn" onclick="downloadAsFile('jsonOutput', 'formatted.json')">💾 Download JSON</button>
       </div>
       <pre id="jsonOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; min-height: 40px;"></pre>
     </div>

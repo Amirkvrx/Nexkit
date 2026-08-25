@@ -206,3 +206,21 @@ if (typeof translations !== 'undefined') {
   translations.en.passGuideText = "How to use Password Generator:\n1. Select desired password length.\n2. Click 'Generate' to create a strong random password.\n3. Click 'Copy' to use it securely.";
   translations.fa.passGuideText = "راهنمای تولید رمز عبور:\n۱. طول رمز عبور مورد نظر را تعیین کنید.\n۲. روی 'تولید رمز' کلیک کنید تا یک رمز قوی و تصادفی ساخته شود.\n۳. با دکمه 'کپی' آن را ذخیره کنید.";
 }
+
+// دانلود خروجی متنی یا JSON به صورت فایل
+function downloadAsFile(elementId, filename) {
+  const content = document.getElementById(elementId).innerText || document.getElementById(elementId).value;
+  if (!content) {
+    alert("No content to download!");
+    return;
+  }
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
