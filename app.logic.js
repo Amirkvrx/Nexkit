@@ -464,3 +464,34 @@ window.addEventListener('DOMContentLoaded', () => {
   setLanguage(initialLang);
   setTimeout(checkFirstRunLanguage, 500);
 });
+
+// مدیریت تاریخچه تبدیل‌ها
+let conversionHistory = JSON.parse(localStorage.getItem('nexkit_conv_history') || '[]');
+
+function addConversionHistory(itemText) {
+  conversionHistory.unshift(itemText);
+  if (conversionHistory.length > 20) conversionHistory.pop(); // نگهداری ۲۰ مورد آخر
+  localStorage.setItem('nexkit_conv_history', JSON.stringify(conversionHistory));
+  renderConversionHistory();
+}
+
+function renderConversionHistory() {
+  const listEl = document.getElementById('conversionHistoryList');
+  if (!listEl) return;
+  
+  if (conversionHistory.length === 0) {
+    listEl.innerHTML = '<p style="color: var(--border); text-align: center;">No conversion history yet.</p>';
+    return;
+  }
+  
+  listEl.innerHTML = conversionHistory.map(item => `
+    <div style="background: var(--bg); padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 14px; border: 1px solid var(--border);">
+      ${item}
+    </div>
+  `).join('');
+}
+
+// به‌روزرسانی توابع تبدیل برای ثبت خودکار در تاریخچه
+const originalConvertLength = window.convertLength;
+// ثبت در تاریخچه هنگام تبدیل طول
+// (می‌توانید با یک تایمر کوچک یا هنگام تغییر کامل مقدار ثبت کنید)

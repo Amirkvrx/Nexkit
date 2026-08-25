@@ -36,6 +36,7 @@
     <button class="tab-btn" onclick="switchTab('compass', this)" data-i18n="compass">Compass</button>
     <button class="tab-btn" onclick="switchTab('calc', this)" data-i18n="calc">Calculator</button>
     <button class="tab-btn" onclick="switchTab('converter', this)" data-i18n="converter">Converter</button>
+    <button class="tab-btn" onclick="switchTab('conv-history', this)">Conv. History</button>
     <button class="tab-btn" onclick="switchTab('text', this)" data-i18n="text">Text</button>
     <button class="tab-btn" onclick="switchTab('notes', this)" data-i18n="notes">Notes</button>
     <button class="tab-btn" onclick="switchTab('todo', this)" data-i18n="todo">To-Do</button>
@@ -102,6 +103,11 @@
       </select>
     </div>
     <p id="tempResult" style="font-family: monospace; color: var(--accent-cyan);">Result: -</p>
+  </div>
+
+  <div class="card" id="tab-conv-history">
+    <h3>Conversion History</h3>
+    <div id="conversionHistoryList" style="margin-top: 10px;">Loading history...</div>
   </div>
 
   <div class="card" id="tab-text">
