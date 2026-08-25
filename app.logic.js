@@ -3,16 +3,16 @@
 const translations = {
   en: {
     level: "Digital Level", compass: "Digital Compass", calc: "Calculator", loan: "Loan Calc",
-    converter: "Length Converter", tempConverter: "Temperature Converter", text: "Text Counter",
-    crypto: "Hash & Base64", timer: "Timer & Reminder", notes: "Quick Notes", todo: "To-Do List",
+    json: "JSON Tools", bmi: "BMI Calc", converter: "Length Converter", tempConverter: "Temperature Converter",
+    text: "Text Counter", crypto: "Hash & Base64", timer: "Timer", notes: "Quick Notes", todo: "To-Do List",
     clock: "World Clock", pass: "Password Generator", qr: "QR Code", torch: "Flashlight",
     gps: "GPS Location", settings: "Settings", backup: "Backup Data", addTaskBtn: "Add",
     genPassBtn: "Generate New", getGpsBtn: "Get GPS Location"
   },
   fa: {
     level: "تراز دیجیتال", compass: "قطب‌نما", calc: "ماشین حساب", loan: "محاسبه وام",
-    converter: "مبدل طول", tempConverter: "مبدل دما", text: "شمارشگر متن",
-    crypto: "هش و کدگذاری", timer: "تایمر و یادآور", notes: "یادداشت سریع", todo: "کارهای روزمره",
+    json: "ابزار JSON", bmi: "شاخص BMI", converter: "مبدل طول", tempConverter: "مبدل دما",
+    text: "شمارشگر متن", crypto: "هش و کدگذاری", timer: "تایمر", notes: "یادداشت سریع", todo: "کارهای روزمره",
     clock: "ساعت جهانی", pass: "تولید رمز عبور", qr: "بارکد QR", torch: "چراغ‌قوه صفحه",
     gps: "موقعیت‌یاب GPS", settings: "تنظیمات", backup: "پشتیبان‌گیری", addTaskBtn: "افزودن",
     genPassBtn: "تولید جدید", getGpsBtn: "دریافت موقعیت"
@@ -64,6 +64,56 @@ function calculate() {
   }
 }
 
+// ابزار JSON Formatter & Validator
+function formatJSON() {
+  const input = document.getElementById('jsonInput').value;
+  const output = document.getElementById('jsonOutput');
+  try {
+    const parsed = JSON.parse(input);
+    output.innerText = JSON.stringify(parsed, null, 2);
+    output.style.color = 'var(--text)';
+  } catch (e) {
+    output.innerText = "Invalid JSON: " + e.message;
+    output.style.color = '#ff5252';
+  }
+}
+
+function minifyJSON() {
+  const input = document.getElementById('jsonInput').value;
+  const output = document.getElementById('jsonOutput');
+  try {
+    const parsed = JSON.parse(input);
+    output.innerText = JSON.stringify(parsed);
+    output.style.color = 'var(--text)';
+  } catch (e) {
+    output.innerText = "Invalid JSON: " + e.message;
+    output.style.color = '#ff5252';
+  }
+}
+
+// محاسبه BMI
+function calculateBMI() {
+  const weight = parseFloat(document.getElementById('bmiWeight').value);
+  const heightCm = parseFloat(document.getElementById('bmiHeight').value);
+  const resultEl = document.getElementById('bmiResult');
+  
+  if (isNaN(weight) || isNaN(heightCm) || heightCm <= 0 || weight <= 0) {
+    resultEl.innerText = "Please enter valid numbers.";
+    return;
+  }
+  
+  const heightM = heightCm / 100;
+  const bmi = (weight / (heightM * heightM)).toFixed(1);
+  let status = "";
+  
+  if (bmi < 18.5) status = "Underweight";
+  else if (bmi < 24.9) status = "Normal weight";
+  else if (bmi < 29.9) status = "Overweight";
+  else status = "Obesity";
+  
+  resultEl.innerHTML = `BMI: <strong>${bmi}</strong> (${status})`;
+}
+
 // محاسبه اقساط وام
 function calculateLoan() {
   const amount = parseFloat(document.getElementById('loanAmount').value);
@@ -104,7 +154,7 @@ function decodeBase64() {
   }
 }
 
-// تایمر و هشدار
+// تایمر
 let timerInterval = null;
 function startTimer() {
   let sec = parseInt(document.getElementById('timerSeconds').value);

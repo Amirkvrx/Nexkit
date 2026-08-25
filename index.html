@@ -23,6 +23,8 @@
   <div class="nav-tabs">
     <button class="tab-btn" onclick="switchTab('calc', this)" data-i18n="calc">Calculator</button>
     <button class="tab-btn" onclick="switchTab('loan', this)" data-i18n="loan">Loan Calc</button>
+    <button class="tab-btn" onclick="switchTab('bmi', this)" data-i18n="bmi">BMI Calc</button>
+    <button class="tab-btn" onclick="switchTab('json', this)" data-i18n="json">JSON Tools</button>
     <button class="tab-btn" onclick="switchTab('crypto', this)" data-i18n="crypto">Base64</button>
     <button class="tab-btn" onclick="switchTab('timer', this)" data-i18n="timer">Timer</button>
     <button class="tab-btn" onclick="switchTab('converter', this)" data-i18n="converter">Converter</button>
@@ -67,6 +69,24 @@
     <input type="number" class="input-field" id="loanMonths" placeholder="Term (Months)">
     <button class="btn btn-accent" onclick="calculateLoan()" style="width: 100%; margin-bottom: 12px;">Calculate</button>
     <p id="loanResult" style="font-size: 14px; line-height: 1.6;"></p>
+  </div>
+
+  <div class="card" id="tab-bmi">
+    <h3 data-i18n="bmi">BMI Calculator</h3>
+    <input type="number" class="input-field" id="bmiWeight" placeholder="Weight (kg)">
+    <input type="number" class="input-field" id="bmiHeight" placeholder="Height (cm)">
+    <button class="btn btn-accent" onclick="calculateBMI()" style="width: 100%; margin-bottom: 12px;">Calculate BMI</button>
+    <p id="bmiResult" style="font-size: 15px;"></p>
+  </div>
+
+  <div class="card" id="tab-json">
+    <h3 data-i18n="json">JSON Formatter & Validator</h3>
+    <textarea class="input-field" id="jsonInput" placeholder="Paste unformatted JSON here..." style="min-height: 100px;"></textarea>
+    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+      <button class="btn btn-accent" onclick="formatJSON()" style="flex: 1;">Format (Prettify)</button>
+      <button class="btn" onclick="minifyJSON()" style="flex: 1;">Minify</button>
+    </div>
+    <pre id="jsonOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); overflow-x: auto; font-size: 12px; min-height: 60px;">Output will appear here...</pre>
   </div>
 
   <div class="card" id="tab-crypto">
