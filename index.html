@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexkit App</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root {
       --bg: #0F172A;
@@ -116,6 +117,17 @@
       border: 1px solid var(--border);
       margin-bottom: 10px;
     }
+    #qrcode {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body>
@@ -183,6 +195,13 @@
     <button class="btn btn-accent" onclick="generatePassword()">ساخت رمز عبور جدید</button>
   </div>
 
+  <!-- سازنده QR Code -->
+  <div class="card">
+    <h3>📱 ساخت بارکد QR</h3>
+    <input type="text" class="input-field" id="qrInput" placeholder="متن یا لینک را وارد کنید..." oninput="generateQR()">
+    <div id="qrcode"></div>
+  </div>
+
   <script>
     function toggleTheme() {
       const body = document.body;
@@ -243,6 +262,7 @@
       if (savedNote) {
         document.getElementById('noteInput').value = savedNote;
       }
+      generateQR();
     };
 
     function generatePassword() {
@@ -252,6 +272,18 @@
         pass += chars.charAt(Math.floor(Math.random() * chars.length));
       }
       document.getElementById('passOutput').innerText = pass;
+    }
+
+    let qrInstance = null;
+    function generateQR() {
+      const val = document.getElementById('qrInput').value || "https://github.com/Amirkvrx/Nexkit";
+      const container = document.getElementById('qrcode');
+      container.innerHTML = "";
+      new QRCode(container, {
+        text: val,
+        width: 128,
+        height: 128
+      });
     }
   </script>
 </body>
