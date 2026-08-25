@@ -570,3 +570,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedTab = localStorage.getItem('nexkit_active_tab') || 'calc';
   switchTab(savedTab, null);
 });
+
+// تابع پاک کردن محتوای کادرهای ورودی و آمارها
+function clearField(fieldId, statsId) {
+  const el = document.getElementById(fieldId);
+  if (el) {
+    el.value = '';
+    if (el.tagName === 'DIV' || el.tagName === 'P') {
+      el.innerText = '';
+    }
+  }
+  if (statsId) {
+    updateTextStats(fieldId, statsId);
+  }
+}
