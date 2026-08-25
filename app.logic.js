@@ -625,3 +625,33 @@ if (typeof translations !== 'undefined') {
     translations[lang].aspectGuideText = "راهنما:\\nابعاد اصلی (عرض و ارتفاع اول) و عرض جدید را وارد کنید تا ارتفاع جدید طبق نسبت تصویر محاسبه شود.";
   });
 }
+
+
+// تابع اصلاح‌شده برای سوئیچ دقیق بین تب‌ها
+function switchTab(tabName, btnElement) {
+  // ۱. مخفی کردن تمام کارت‌های ابزار
+  const cards = document.querySelectorAll('.tool-card');
+  cards.forEach(card => card.style.display = 'none');
+
+  // ۲. برداشتن استایل active از دکمه‌ها
+  const navBtns = document.querySelectorAll('.tab-btn');
+  navBtns.forEach(btn => btn.classList.remove('active'));
+
+  // ۳. فعال کردن دکمه و نمایش کارت مربوطه
+  if (btnElement) {
+    btnElement.classList.add('active');
+  } else {
+    const targetBtn = document.querySelector(`.tab-btn[onclick*="'${tabName}'"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+  }
+
+  const targetCard = document.getElementById('tab-' + tabName);
+  if (targetCard) {
+    targetCard.style.display = 'block';
+  }
+}
+
+// مقداردهی اولیه پس از لود کامل صفحه
+document.addEventListener('DOMContentLoaded', () => {
+  switchTab('calc', document.querySelector('.tab-btn'));
+});
