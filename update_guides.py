@@ -1,44 +1,63 @@
-with open('index.html', 'r', encoding='utf-8') as f:
-    html = f.read()
+with open('app.logic.js', 'r', encoding='utf-8') as f:
+    js = f.read()
 
-# جایگزینی کارت JSON با نسخه دارای تب راهنما
-old_json_card = '''  <div class="card" id="tab-json">
-    <h3 data-i18n="json">JSON Formatter</h3>
-    <textarea class="input-field" id="jsonInput" placeholder="Paste unformatted JSON..."></textarea>
-    <button class="btn btn-accent" onclick="formatJSON()" style="width: 100%; margin-bottom: 12px;">Format JSON</button>
-    <pre id="jsonOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; overflow-x: auto;"></pre>
-  </div>'''
+# ۱. به‌روزرسانی BMI با تحلیل وضعیت
+old_bmi = '''function calculateBMI() {
+  const w = parseFloat(document.getElementById('bmiWeight').value);
+  const h = parseFloat(document.getElementById('bmiHeight').value) / 100;
+  const res = document.getElementById('bmiResult');
+  if (w > 0 && h > 0) {
+    const bmi = (w / (h * h)).toFixed(1);
+    res.innerText = `شاخص BMI شما: ${bmi}`;
+  } else {
+    res.innerText = 'لطفاً مقادیر معتبر وارد کنید.';
+  }
+}'''
 
-new_json_card = '''  <div class="card" id="tab-json">
-    <h3 data-i18n="json">JSON Tools</h3>
-    <div class="sub-tabs">
-      <button class="sub-tab-btn active" onclick="switchSubTab('json', 'tool', this)">Tool / ابزار</button>
-      <button class="sub-tab-btn" onclick="switchSubTab('json', 'guide', this)">Guide / راهنما</button>
-    </div>
-    
-    <div id="json-tool" class="sub-pane">
-      <textarea class="input-field" id="jsonInput" placeholder="Paste unformatted JSON..." style="min-height: 80px;"></textarea>
-      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-        <button class="btn btn-accent" onclick="formatJSON()" style="flex: 1;">Format</button>
-        <button class="btn" onclick="minifyJSON()" style="flex: 1;">Minify</button>
-      </div>
-      <pre id="jsonOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; overflow-x: auto; min-height: 40px;">Output...</pre>
-    </div>
-    
-    <div id="json-guide" class="sub-pane" style="display: none;">
-      <div class="guide-content">
-        <strong>راهنمای استفاده از ابزار JSON:</strong><br>
-        این ابزار داده‌های ساختاریافته JSON شما مرتب (Prettify) یا فشرده (Minify) می‌کند.<br>
-        1. متن JSON خود را در کادر ابزار وارد کنید.<br>
-        2. دکمه Format را بزنید تا خطاها رفع و ساختار خوانا شود.
-      </div>
-    </div>
-  </div>'''
+new_bmi = '''function calculateBMI() {
+  const w = parseFloat(document.getElementById('bmiWeight').value);
+  const h = parseFloat(document.getElementById('bmiHeight').value) / 100;
+  const res = document.getElementById('bmiResult');
+  if (w > 0 && h > 0) {
+    const bmi = parseFloat((w / (h * h)).toFixed(1));
+    let status = '';
+    if (bmi < 18.5) status = 'کمبود وزن (نیاز به افزایش وزن)';
+    else if (bmi < 24.9) status = 'وزن نرمال و ایده‌آل';
+    else if (bmi < 29.9) status = 'اضافه وزن';
+    else status = 'چاقی';
 
-if old_json_card in html:
-    html = html.replace(old_json_card, new_json_card)
-    with open('index.html', 'w', encoding='utf-8') as f:
-        f.write(html)
-    print("JSON card updated with guide tabs!")
-else:
-    print("Card structure mismatch, skipping automated replacement.")
+    res.innerHTML = `<strong>شاخص BMI شما: ${bmi}</strong><br><span style="font-size: 13px; color: #4b5563;">وضعیت: ${status}</span>`;
+  } else {
+    res.innerText = 'لطفاً مقادیر معتبر وارد کنید.';
+  }
+}'''
+
+# ۲. به‌روزرسانی مبدل رنگ با پیش‌نمایش
+old_color = '''function convertColor(hexValue) {
+  const hex = hexValue.replace('#', '');
+  if (hex.length !== 6) return;
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  document.getElementById('colorResult').innerText = `HEX: #${hex.toUpperCase()} | RGB: rgb(${r}, ${g}, ${b})`;
+}'''
+
+new_color = '''function convertColor(hexValue) {
+  const hex = hexValue.replace('#', '');
+  if (hex.length !== 6) return;
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const res = document.getElementById('colorResult');
+  res.innerHTML = `<div style="display:flex; align-items:center; gap:10px;">
+    <div style="width:24px; height:24px; background:#${hex}; border-radius:4px; border:1px solid #ccc;"></div>
+    <div><strong>HEX: #${hex.toUpperCase()}</strong> | <strong>RGB: rgb(${r}, ${g}, ${b})</strong><br><span style="font-size: 12px; color: #4b5563;">کد رنگی آماده استفاده در CSS و گرافیک</span></div>
+  </div>`;
+}'''
+
+js = js.replace(old_bmi, new_bmi).replace(old_color, new_color)
+
+with open('app.logic.js', 'w', encoding='utf-8') as f:
+    f.write(js)
+
+print("Result interpretation guides added successfully!")
