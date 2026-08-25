@@ -104,7 +104,15 @@
     <!-- 1. Calculator -->
     <div class="card tool-card" id="tab-calc">
       <h3>Calculator</h3>
-      <input type="text" class="input-field" id="calcDisplay" readonly style="text-align: left; font-size: 20px; font-weight: bold;">
+      <div class="sub-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn sub-tab-tool active" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('calc', 'tool', this)">ابزار</button>
+        <button class="btn sub-tab-guide" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('calc', 'guide', this)">آموزش استفاده</button>
+      </div>
+      <div id="calc-guide" style="display:none; padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; line-height: 1.6; color: var(--text-sub);">
+        راهنما:
+از دکمه‌های عددی و عملیات ریاضی (+، -، *، /) برای محاسبات سریع استفاده کنید. دکمه C ورودی را پاک می‌کند.
+      </div>
+      <div id="calc-tool"><input type="text" class="input-field" id="calcDisplay" readonly style="text-align: left; font-size: 20px; font-weight: bold;">
       <div class="calc-grid">
         <button class="btn" onclick="clearCalc()">C</button>
         <button class="btn" onclick="appendCalc('/')">/</button>
@@ -123,33 +131,57 @@
         <button class="btn" onclick="appendCalc('3')">3</button>
         <button class="btn" onclick="appendCalc('0')" style="grid-column: span 2;">0</button>
         <button class="btn" onclick="appendCalc('.')">.</button>
-      </div>
+      </div></div>
     </div>
 
     <!-- 2. JSON -->
     <div class="card tool-card" id="tab-json" style="display:none;">
       <h3>JSON Tools</h3>
-      <textarea class="input-field" id="jsonInput" placeholder="JSON را وارد کنید..." style="min-height: 100px;"></textarea>
+      <div class="sub-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn sub-tab-tool active" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('json', 'tool', this)">ابزار</button>
+        <button class="btn sub-tab-guide" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('json', 'guide', this)">آموزش استفاده</button>
+      </div>
+      <div id="json-guide" style="display:none; padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; line-height: 1.6; color: var(--text-sub);">
+        راهنما:
+کد JSON خود را در باکس وارد کنید. دکمه Format آن را مرتب و خوانا می‌کند و دکمه Minify فواصل اضافی را برای کاهش حجم پاک می‌کند.
+      </div>
+      <div id="json-tool"><textarea class="input-field" id="jsonInput" placeholder="JSON را وارد کنید..." style="min-height: 100px;"></textarea>
       <div style="display: flex; gap: 8px; margin-bottom: 10px;">
         <button class="btn btn-accent" onclick="formatJSON()" style="flex: 1;">Format</button>
         <button class="btn" onclick="minifyJSON()" style="flex: 1;">Minify</button>
       </div>
       <textarea class="input-field" id="jsonOutput" readonly placeholder="نتیجه..." style="min-height: 100px;"></textarea>
-    </div>
+    </div></div>
 
     <!-- 3. Diff -->
     <div class="card tool-card" id="tab-diff" style="display:none;">
       <h3>Text Diff</h3>
-      <textarea class="input-field" id="text1" placeholder="متن اول..."></textarea>
+      <div class="sub-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn sub-tab-tool active" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('diff', 'tool', this)">ابزار</button>
+        <button class="btn sub-tab-guide" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('diff', 'guide', this)">آموزش استفاده</button>
+      </div>
+      <div id="diff-guide" style="display:none; padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; line-height: 1.6; color: var(--text-sub);">
+        راهنما:
+دو متن مورد نظر خود را در دو باکس قرار دهید و دکمه مقایسه را بزنید تا تفاوت‌های طولی و متنی آن‌ها مشخص شود.
+      </div>
+      <div id="diff-tool"><textarea class="input-field" id="text1" placeholder="متن اول..."></textarea>
       <textarea class="input-field" id="text2" placeholder="متن دوم..."></textarea>
       <button class="btn btn-accent" onclick="compareTexts()" style="width:100%; margin-bottom: 10px;">مقایسه</button>
       <div id="diffResult" style="background: var(--bg); padding: 10px; border-radius: 8px;"></div>
-    </div>
+    </div></div>
 
     <!-- 4. Case Converter -->
     <div class="card tool-card" id="tab-case" style="display:none;">
       <h3>Case Converter</h3>
-      <textarea class="input-field" id="caseInput" placeholder="متن را وارد کنید..." oninput="updateTextStats('caseInput', 'caseStats')"></textarea>
+      <div class="sub-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn sub-tab-tool active" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('case', 'tool', this)">ابزار</button>
+        <button class="btn sub-tab-guide" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('case', 'guide', this)">آموزش استفاده</button>
+      </div>
+      <div id="case-guide" style="display:none; padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; line-height: 1.6; color: var(--text-sub);">
+        راهنما:
+متن خود را وارد کنید و یکی از حالت‌های UPPERCASE (حروف بزرگ)، lowercase (حروف کوچک) یا Title Case (حرف اول بزرگ) را انتخاب کنید.
+      </div>
+      <div id="case-tool"><textarea class="input-field" id="caseInput" placeholder="متن را وارد کنید..." oninput="updateTextStats('caseInput', 'caseStats')"></textarea>
       <div id="caseStats" style="font-size: 12px; color: #666; margin-bottom: 8px;">Words: 0 | Chars: 0 | Lines: 0</div>
       <div style="display: flex; gap: 8px; margin-bottom: 10px;">
         <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
@@ -157,49 +189,89 @@
         <button class="btn" onclick="convertCase('title')">Title Case</button>
       </div>
       <button class="btn" onclick="clearField('caseInput', 'caseStats')">🗑️ Clear</button>
-    </div>
+    </div></div>
 
     <!-- 5. Password Generator -->
     <div class="card tool-card" id="tab-pass" style="display:none;">
       <h3>Password Generator</h3>
-      <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+      <div class="sub-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn sub-tab-tool active" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('pass', 'tool', this)">ابزار</button>
+        <button class="btn sub-tab-guide" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('pass', 'guide', this)">آموزش استفاده</button>
+      </div>
+      <div id="pass-guide" style="display:none; padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; line-height: 1.6; color: var(--text-sub);">
+        راهنما:
+طول رمز عبور مورد نظر را مشخص کرده و دکمه تولید رمز را بزنید تا یک پسورد امن و تصادفی ایجاد شود.
+      </div>
+      <div id="pass-tool"><div style="display: flex; gap: 8px; margin-bottom: 10px;">
         <input type="number" id="passLength" class="input-field" value="12" style="width: 80px; margin:0;">
         <button class="btn btn-accent" onclick="generatePassword()" style="flex:1;">تولید رمز</button>
       </div>
       <input type="text" id="passOutput" class="input-field" readonly>
-    </div>
+    </div></div>
 
     <!-- 6. Base64 -->
     <div class="card tool-card" id="tab-base64" style="display:none;">
       <h3>Base64</h3>
-      <textarea class="input-field" id="cryptoInput" placeholder="متن..."></textarea>
+      <div class="sub-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn sub-tab-tool active" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('base64', 'tool', this)">ابزار</button>
+        <button class="btn sub-tab-guide" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('base64', 'guide', this)">آموزش استفاده</button>
+      </div>
+      <div id="base64-guide" style="display:none; padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; line-height: 1.6; color: var(--text-sub);">
+        راهنما:
+متن عادی را وارد کنید و Encode را بزنید تا به کد Base64 تبدیل شود، یا کد Base64 را وارد کرده و Decode را بزنید تا متن اصلی استخراج شود.
+      </div>
+      <div id="base64-tool"><textarea class="input-field" id="cryptoInput" placeholder="متن..."></textarea>
       <div style="display: flex; gap: 8px; margin-bottom: 10px;">
         <button class="btn btn-accent" onclick="processBase64('encode')" style="flex: 1;">Encode</button>
         <button class="btn" onclick="processBase64('decode')" style="flex: 1;">Decode</button>
       </div>
       <div id="cryptoOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; word-break: break-all;"></div>
-    </div>
+    </div></div>
 
     <!-- 7. BMI -->
     <div class="card tool-card" id="tab-bmi" style="display:none;">
       <h3>BMI Calculator</h3>
-      <input type="number" id="bmiWeight" class="input-field" placeholder="وزن (کیلوگرم)">
+      <div class="sub-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn sub-tab-tool active" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('bmi', 'tool', this)">ابزار</button>
+        <button class="btn sub-tab-guide" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('bmi', 'guide', this)">آموزش استفاده</button>
+      </div>
+      <div id="bmi-guide" style="display:none; padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; line-height: 1.6; color: var(--text-sub);">
+        راهنما:
+وزن (کیلوگرم) و قد (سانتی‌متر) خود را وارد کنید تا شاخص توده بدنی (BMI) و محدوده وزن ایده‌آل شما محاسبه شود.
+      </div>
+      <div id="bmi-tool"><input type="number" id="bmiWeight" class="input-field" placeholder="وزن (کیلوگرم)">
       <input type="number" id="bmiHeight" class="input-field" placeholder="قد (سانتی‌متر)">
       <button class="btn btn-accent" onclick="calculateBMI()" style="width: 100%; margin-bottom: 10px;">محاسبه BMI</button>
       <div id="bmiResult" style="background: var(--bg); padding: 10px; border-radius: 8px;"></div>
-    </div>
+    </div></div>
 
     <!-- 8. Color Converter -->
     <div class="card tool-card" id="tab-color" style="display:none;">
       <h3>Color Converter</h3>
-      <input type="color" id="colorPicker" value="#2563eb" oninput="convertColor(this.value)" style="width: 50px; height: 40px; cursor: pointer;">
+      <div class="sub-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn sub-tab-tool active" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('color', 'tool', this)">ابزار</button>
+        <button class="btn sub-tab-guide" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('color', 'guide', this)">آموزش استفاده</button>
+      </div>
+      <div id="color-guide" style="display:none; padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; line-height: 1.6; color: var(--text-sub);">
+        راهنما:
+رنگ مورد نظر را از رنگ‌پیکر انتخاب کنید یا کد HEX را بنویسید تا فرمت‌های RGB و HEX استخراج شوند.
+      </div>
+      <div id="color-tool"><input type="color" id="colorPicker" value="#2563eb" oninput="convertColor(this.value)" style="width: 50px; height: 40px; cursor: pointer;">
       <div id="colorResult" style="background: var(--bg); padding: 10px; border-radius: 8px; margin-top: 10px;">HEX: #2563EB | RGB: rgb(37, 99, 235)</div>
-    </div>
+    </div></div>
 
     <!-- 9. Aspect Ratio -->
     <div class="card tool-card" id="tab-aspect" style="display:none;">
       <h3>Aspect Ratio Calculator</h3>
-      <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+      <div class="sub-tabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn sub-tab-tool active" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('aspect', 'tool', this)">ابزار</button>
+        <button class="btn sub-tab-guide" style="padding: 4px 12px; font-size: 12px;" onclick="switchSubTab('aspect', 'guide', this)">آموزش استفاده</button>
+      </div>
+      <div id="aspect-guide" style="display:none; padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; line-height: 1.6; color: var(--text-sub);">
+        راهنما:
+ابعاد اصلی (عرض و ارتفاع اول) و عرض جدید را وارد کنید تا ارتفاع جدید متناسب با نسبت تصویر محاسبه شود.
+      </div>
+      <div id="aspect-tool"><div style="display: flex; gap: 8px; margin-bottom: 8px;">
         <input type="number" id="arW1" class="input-field" value="1920" style="margin:0;">
         <span>:</span>
         <input type="number" id="arH1" class="input-field" value="1080" style="margin:0;">
@@ -209,7 +281,7 @@
         <span>:</span>
         <input type="number" id="arH2" class="input-field" placeholder="ارتفاع جدید" readonly style="margin:0;">
       </div>
-    </div>
+    </div></div>
 
     <!-- Bottom Ad -->
     <div style="text-align: center; margin-top: 20px; padding: 15px; background: var(--card-bg); border: 1px dashed var(--border); border-radius: 8px;">
