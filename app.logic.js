@@ -224,3 +224,30 @@ function downloadAsFile(elementId, filename) {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+// کدگذاری و کدگشایی Base64 به همراه پشتیبانی از UTF-8 (متن‌های فارسی)
+function processBase64(mode) {
+  const input = document.getElementById('cryptoInput').value;
+  const outputEl = document.getElementById('cryptoOutput');
+  
+  if (!input) {
+    outputEl.innerText = "Please enter text.";
+    return;
+  }
+  
+  try {
+    if (mode === 'encode') {
+      outputEl.innerText = btoa(unescape(encodeURIComponent(input)));
+    } else if (mode === 'decode') {
+      outputEl.innerText = decodeURIComponent(escape(atob(input)));
+    }
+  } catch (e) {
+    outputEl.innerText = "Invalid Base64 input!";
+  }
+}
+
+// اضافه کردن متن‌های راهنمای Base64 و BMI به شیء ترجمه‌ها
+if (typeof translations !== 'undefined') {
+  translations.en.cryptoGuideText = "How to use Base64:\n1. Enter normal text to Encode or Base64 string to Decode.\n2. Click the desired operation button.\n3. Copy or download the output result.";
+  translations.fa.cryptoGuideText = "راهنمای Base64:\n۱. متن معمولی برای کدگذاری یا متن Base64 برای کدگشایی را وارد کنید.\n۲. دکمه عملیات مورد نظر را بزنید.\n۳. خروجی را کپی یا دانلود کنید.";
+}
