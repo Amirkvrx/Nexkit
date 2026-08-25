@@ -176,3 +176,54 @@ function updateHistoryUI() {
 window.addEventListener('load', () => {
   updateHistoryUI();
 });
+
+// مدیریت لیست وظایف (To-Do List)
+let tasks = JSON.parse(localStorage.getItem('nexkit_tasks')) || [];
+
+function addTask() {
+  const input = document.getElementById('taskInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  tasks.push({ id: Date.now(), text, completed: false });
+  input.value = '';
+  saveAndRenderTasks();
+  showToast('وظیفه جدید اضافه شد ✅');
+}
+
+function toggleTask(id) {
+  tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+  saveAndRenderTasks();
+}
+
+function deleteTask(id) {
+  tasks = tasks.filter(t => t.id !== id);
+  saveAndRenderTasks();
+  showToast('وظیفه حذف شد 🗑️');
+}
+
+function saveAndRenderTasks() {
+  localStorage.setItem('nexkit_tasks', JSON.stringify(tasks));
+  renderTasks();
+}
+
+function renderTasks() {
+  const container = document.getElementById('taskList');
+  if (!container) return;
+  
+  if (tasks.length === 0) {
+    container.innerHTML = '<p style="text-align: center; color: var(--border);">هیچ وظیفه‌ای ثبت نشده است.</p>';
+    return;
+  }
+  
+  container.innerHTML = tasks.map(t => `
+    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 8px 12px; margin-bottom: 6px; border-radius: 8px; border: 1px solid var(--border);">
+      <span onclick="toggleTask(${t.id})" style="cursor: pointer; text-decoration: ${t.completed ? 'line-through' : 'none'}; opacity: ${t.completed ? '0.6' : '1'}; flex-grow: 1;">${t.text}</span>
+      <button onclick="deleteTask(${t.id})" style="background: none; border: none; color: #EF4444; cursor: pointer; font-size: 16px;">✕</button>
+    </div>
+  `).join('');
+}
+
+window.addEventListener('load', () => {
+  renderTasks();
+});
