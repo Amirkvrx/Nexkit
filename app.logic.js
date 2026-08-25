@@ -584,3 +584,44 @@ function clearField(fieldId, statsId) {
     updateTextStats(fieldId, statsId);
   }
 }
+
+// ۱. تبدیل فرمت کدهای رنگ
+function convertColor(hexValue) {
+  const hex = hexValue.replace('#', '');
+  if (hex.length !== 6) return;
+
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  const rgbStr = `rgb(${r}, ${g}, ${b})`;
+  const hexStr = `#${hex.toUpperCase()}`;
+
+  const resEl = document.getElementById('colorResult');
+  if (resEl) {
+    resEl.innerText = `HEX: ${hexStr}  |  RGB: ${rgbStr}`;
+  }
+}
+
+// ۲. محاسبه نسبت تصویر (Aspect Ratio)
+function calcAspectRatio() {
+  const w1 = parseFloat(document.getElementById('arW1').value);
+  const h1 = parseFloat(document.getElementById('arH1').value);
+  const w2 = parseFloat(document.getElementById('arW2').value);
+  const h2Input = document.getElementById('arH2');
+
+  if (w1 > 0 && h1 > 0 && w2 > 0) {
+    const calculatedH2 = Math.round((h1 / w1) * w2);
+    h2Input.value = calculatedH2;
+  }
+}
+
+// اضافه کردن متون راهنمای ابزارهای جدید به سیستم ترجمه
+if (typeof translations !== 'undefined') {
+  Object.keys(translations).forEach(lang => {
+    translations[lang].color = lang === 'fa' ? "مبدل رنگ" : "Color Converter";
+    translations[lang].aspect = lang === 'fa' ? "نسبت تصویر" : "Aspect Ratio";
+    translations[lang].colorGuideText = "راهنما:\\nرنگ مورد نظر خود را انتخاب یا کد HEX را وارد کنید تا کدهای RGB و HEX استاندارد تولید شوند.";
+    translations[lang].aspectGuideText = "راهنما:\\nابعاد اصلی (عرض و ارتفاع اول) و عرض جدید را وارد کنید تا ارتفاع جدید طبق نسبت تصویر محاسبه شود.";
+  });
+}
