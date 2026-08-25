@@ -6,7 +6,6 @@
   <title>Nexkit App</title>
   <link rel="stylesheet" href="style.config.css">
   <link rel="manifest" href="manifest.json">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div class="header">
@@ -21,7 +20,7 @@
   </div>
 
   <div class="search-container">
-    <input type="text" id="quickSearch" class="search-input" placeholder="🔍 Quick search tools... (Ctrl + K)" oninput="filterTools(this.value)">
+    <input type="text" id="quickSearch" class="search-input" placeholder="🔍 Quick search tools..." oninput="filterTools(this.value)">
   </div>
 
   <div class="nav-tabs">
@@ -30,64 +29,76 @@
     <button class="tab-btn" onclick="switchTab('textDiff', this)" data-i18n="textDiff">Text Diff</button>
     <button class="tab-btn" onclick="switchTab('caseConv', this)" data-i18n="caseConv">Case Converter</button>
     <button class="tab-btn" onclick="switchTab('json', this)" data-i18n="json">JSON Tools</button>
-    <button class="tab-btn" onclick="switchTab('bmi', this)" data-i18n="bmi">BMI Calc</button>
-    <button class="tab-btn" onclick="switchTab('crypto', this)" data-i18n="crypto">Base64</button>
-    <button class="tab-btn" onclick="switchTab('loan', this)" data-i18n="loan">Loan Calc</button>
-    <button class="tab-btn" onclick="switchTab('timer', this)" data-i18n="timer">Timer</button>
-    <button class="tab-btn" onclick="switchTab('converter', this)" data-i18n="converter">Converter</button>
-    <button class="tab-btn" onclick="switchTab('text', this)" data-i18n="text">Text</button>
-    <button class="tab-btn" onclick="switchTab('notes', this)" data-i18n="notes">Notes</button>
-    <button class="tab-btn" onclick="switchTab('todo', this)" data-i18n="todo">To-Do</button>
-    <button class="tab-btn" onclick="switchTab('clock', this)" data-i18n="clock">World Clock</button>
-    <button class="tab-btn" onclick="switchTab('pass', this)" data-i18n="pass">Password</button>
-    <button class="tab-btn" onclick="switchTab('qr', this)" data-i18n="qr">QR Code</button>
-    <button class="tab-btn" onclick="switchTab('torch', this)" data-i18n="torch">Flashlight</button>
-    <button class="tab-btn" onclick="switchTab('gps', this)" data-i18n="gps">GPS</button>
-    <button class="tab-btn" onclick="switchTab('colorTool', this)" data-i18n="colorTool">Color Tools</button>
     <button class="tab-btn" onclick="switchTab('settings', this)" data-i18n="settings">Settings</button>
   </div>
 
-  <!-- ابزار فشرده‌سازی و تبدیل تصویر -->
-  <div class="card" id="tab-imgTool">
+  <!-- ابزار تصویر به همراه تب راهنما -->
+  <div class="card" id="tab-imgTool" style="display:none;">
     <h3 data-i18n="imgTool">Image Converter & Compressor</h3>
-    <input type="file" id="imgInput" accept="image/*" class="input-field">
-    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-      <select id="imgFormat" class="theme-btn" style="flex: 1; padding: 10px;">
-        <option value="image/webp">WEBP</option>
-        <option value="image/jpeg">JPG</option>
-        <option value="image/png">PNG</option>
-      </select>
-      <select id="imgQuality" class="theme-btn" style="flex: 1; padding: 10px;">
-        <option value="0.9">High Quality (90%)</option>
-        <option value="0.7">Medium Quality (70%)</option>
-        <option value="0.5">Low Quality (50%)</option>
-      </select>
+    <div class="sub-tabs">
+      <button class="sub-tab-btn sub-tab-tool active" onclick="switchSubTab('imgTool', 'tool', this)">Tool</button>
+      <button class="sub-tab-btn sub-tab-guide" onclick="switchSubTab('imgTool', 'guide', this)">Guide</button>
     </div>
-    <button class="btn btn-accent" onclick="processImage()" style="width: 100%; margin-bottom: 12px;">Process Image</button>
-    <div id="imgOutput" style="text-align: center;"></div>
+    <div id="imgTool-tool" class="sub-pane">
+      <input type="file" id="imgInput" accept="image/*" class="input-field">
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <select id="imgFormat" class="theme-btn" style="flex: 1; padding: 10px;">
+          <option value="image/webp">WEBP</option>
+          <option value="image/jpeg">JPG</option>
+          <option value="image/png">PNG</option>
+        </select>
+        <select id="imgQuality" class="theme-btn" style="flex: 1; padding: 10px;">
+          <option value="0.9">High (90%)</option>
+          <option value="0.7">Medium (70%)</option>
+        </select>
+      </div>
+      <button class="btn btn-accent" onclick="processImage()" style="width: 100%; margin-bottom: 12px;">Process Image</button>
+      <div id="imgOutput" style="text-align: center;"></div>
+    </div>
+    <div id="imgTool-guide" class="sub-pane" style="display:none;">
+      <div class="guide-content" style="white-space: pre-line;" data-i18n="imgGuideText">Guide text here...</div>
+    </div>
   </div>
 
-  <!-- ابزار مقایسه متن -->
-  <div class="card" id="tab-textDiff">
+  <!-- ابزار مقایسه متن به همراه تب راهنما -->
+  <div class="card" id="tab-textDiff" style="display:none;">
     <h3 data-i18n="textDiff">Text Diff Checker</h3>
-    <textarea class="input-field" id="diffText1" placeholder="Original text..." style="min-height: 70px;"></textarea>
-    <textarea class="input-field" id="diffText2" placeholder="Modified text..." style="min-height: 70px;"></textarea>
-    <button class="btn btn-accent" onclick="compareTexts()" style="width: 100%; margin-bottom: 12px;">Compare Texts</button>
-    <div id="diffResult" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-family: monospace; font-size: 12px; overflow-x: auto;"></div>
-  </div>
-
-  <!-- ابزار تغییر حالت حروف -->
-  <div class="card" id="tab-caseConv">
-    <h3 data-i18n="caseConv">Text Case Converter</h3>
-    <textarea class="input-field" id="caseInput" placeholder="Enter text to convert case..." style="min-height: 90px;"></textarea>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-      <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
-      <button class="btn" onclick="convertCase('lower')">lowercase</button>
-      <button class="btn" onclick="convertCase('title')">Title Case</button>
-      <button class="btn" onclick="convertCase('camel')">camelCase</button>
+    <div class="sub-tabs">
+      <button class="sub-tab-btn sub-tab-tool active" onclick="switchSubTab('textDiff', 'tool', this)">Tool</button>
+      <button class="sub-tab-btn sub-tab-guide" onclick="switchSubTab('textDiff', 'guide', this)">Guide</button>
+    </div>
+    <div id="textDiff-tool" class="sub-pane">
+      <textarea class="input-field" id="diffText1" placeholder="Original text..." style="min-height: 60px;"></textarea>
+      <textarea class="input-field" id="diffText2" placeholder="Modified text..." style="min-height: 60px;"></textarea>
+      <button class="btn btn-accent" onclick="compareTexts()" style="width: 100%; margin-bottom: 12px;">Compare Texts</button>
+      <div id="diffResult" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-family: monospace; font-size: 12px;"></div>
+    </div>
+    <div id="textDiff-guide" class="sub-pane" style="display:none;">
+      <div class="guide-content" style="white-space: pre-line;" data-i18n="diffGuideText">Guide text here...</div>
     </div>
   </div>
 
+  <!-- ابزار JSON به همراه تب راهنما -->
+  <div class="card" id="tab-json" style="display:none;">
+    <h3 data-i18n="json">JSON Tools</h3>
+    <div class="sub-tabs">
+      <button class="sub-tab-btn sub-tab-tool active" onclick="switchSubTab('json', 'tool', this)">Tool</button>
+      <button class="sub-tab-btn sub-tab-guide" onclick="switchSubTab('json', 'guide', this)">Guide</button>
+    </div>
+    <div id="json-tool" class="sub-pane">
+      <textarea class="input-field" id="jsonInput" placeholder="Paste unformatted JSON..." style="min-height: 80px;"></textarea>
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button class="btn btn-accent" onclick="formatJSON()" style="flex: 1;">Format</button>
+        <button class="btn" onclick="minifyJSON()" style="flex: 1;">Minify</button>
+      </div>
+      <pre id="jsonOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; min-height: 40px;"></pre>
+    </div>
+    <div id="json-guide" class="sub-pane" style="display:none;">
+      <div class="guide-content" style="white-space: pre-line;" data-i18n="jsonGuideText">Guide text here...</div>
+    </div>
+  </div>
+
+  <!-- ماشین حساب پایه -->
   <div class="card" id="tab-calc">
     <h3 data-i18n="calc">Calculator</h3>
     <input type="text" class="input-field" id="screen" readonly>
@@ -100,64 +111,20 @@
       <button class="btn" onclick="press('8')">8</button>
       <button class="btn" onclick="press('9')">9</button>
       <button class="btn" onclick="press('+')">+</button>
-      <button class="btn" onclick="press('4')">4</button>
-      <button class="btn" onclick="press('5')">5</button>
-      <button class="btn" onclick="press('6')">6</button>
-      <button class="btn btn-accent" onclick="calculate()">=</button>
       <button class="btn" onclick="press('1')">1</button>
       <button class="btn" onclick="press('2')">2</button>
       <button class="btn" onclick="press('3')">3</button>
-      <button class="btn" onclick="press('0')">0</button>
+      <button class="btn btn-accent" onclick="calculate()">=</button>
+      <button class="btn" onclick="press('0')" style="grid-column: span 4;">0</button>
     </div>
   </div>
 
-  <div class="card" id="tab-json">
-    <h3 data-i18n="json">JSON Tools</h3>
-    <div class="sub-tabs">
-      <button class="sub-tab-btn active" onclick="switchSubTab('json', 'tool', this)">Tool / ابزار</button>
-      <button class="sub-tab-btn" onclick="switchSubTab('json', 'guide', this)">Guide / راهنما</button>
-    </div>
-    
-    <div id="json-tool" class="sub-pane">
-      <textarea class="input-field" id="jsonInput" placeholder="Paste unformatted JSON..." style="min-height: 80px;"></textarea>
-      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-        <button class="btn btn-accent" onclick="formatJSON()" style="flex: 1;">Format</button>
-        <button class="btn" onclick="minifyJSON()" style="flex: 1;">Minify</button>
-      </div>
-      <pre id="jsonOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; overflow-x: auto; min-height: 40px;">Output...</pre>
-    </div>
-    
-    <div id="json-guide" class="sub-pane" style="display: none;">
-      <div class="guide-content">
-        <strong>راهنمای استفاده از ابزار JSON:</strong><br>
-        این ابزار داده‌های ساختاریافته JSON شما مرتب (Prettify) یا فشرده (Minify) می‌کند.<br>
-        1. متن JSON خود را در کادر ابزار وارد کنید.<br>
-        2. دکمه Format را بزنید تا خطاها رفع و ساختار خوانا شود.
-      </div>
-    </div>
-  </div>
-
-  <div class="card" id="tab-bmi">
-    <h3 data-i18n="bmi">BMI Calculator</h3>
-    <input type="number" class="input-field" id="bmiWeight" placeholder="Weight (kg)">
-    <input type="number" class="input-field" id="bmiHeight" placeholder="Height (cm)">
-    <button class="btn btn-accent" onclick="calculateBMI()" style="width: 100%; margin-bottom: 12px;">Calculate BMI</button>
-    <p id="bmiResult"></p>
-  </div>
-
-  <div class="card" id="tab-crypto">
-    <h3 data-i18n="crypto">Base64 Encoder / Decoder</h3>
-    <textarea class="input-field" id="cryptoInput" placeholder="Enter text..."></textarea>
-    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-      <button class="btn btn-accent" onclick="encodeBase64()" style="flex: 1;">Encode</button>
-      <button class="btn" onclick="decodeBase64()" style="flex: 1;">Decode</button>
-    </div>
-    <p id="cryptoOutput" style="font-family: monospace; background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); word-break: break-all;"></p>
+  <!-- تنظیمات -->
+  <div class="card" id="tab-settings" style="display:none;">
+    <h3 data-i18n="settings">Settings</h3>
+    <p style="color: var(--border); font-size: 13px;">Nexkit Multi-Language Utility Suite v3.0</p>
   </div>
 
   <script src="app.logic.js"></script>
 </body>
 </html>
-<!-- این بخش را می‌توانید به لیست تب‌ها و کارت‌های index.html اضافه کنید -->
-<!-- دکمه تب جدید -->
-<!-- <button class="tab-btn" onclick="switchTab('colorTool', this)" data-i18n="colorTool">Color Tools</button> -->
