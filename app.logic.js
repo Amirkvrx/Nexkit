@@ -427,3 +427,50 @@ function setLanguage(lang) {
   document.querySelectorAll('.sub-tab-tool').forEach(el => el.innerText = langData.toolTab);
   document.querySelectorAll('.sub-tab-guide').forEach(el => el.innerText = langData.guideTab);
 }
+
+// محاسبه شاخص توده بدنی (BMI)
+function calculateBMI() {
+  const weight = parseFloat(document.getElementById('bmiWeight').value);
+  const height = parseFloat(document.getElementById('bmiHeight').value) / 100;
+  const resultEl = document.getElementById('bmiResult');
+
+  if (!weight || !height || height <= 0 || weight <= 0) {
+    resultEl.innerText = "Please enter valid weight and height.";
+    return;
+  }
+
+  const bmi = (weight / (height * height)).toFixed(1);
+  let status = "";
+
+  if (bmi < 18.5) status = "Underweight";
+  else if (bmi < 24.9) status = "Normal weight";
+  else if (bmi < 29.9) status = "Overweight";
+  else status = "Obesity";
+
+  resultEl.innerText = `BMI: ${bmi} (${status})`;
+}
+
+// اضافه کردن متون BMI به شیء ترجمه‌ها
+if (typeof translations !== 'undefined') {
+  const bmiGuides = {
+    fa: "راهنمای BMI:\\n۱. وزن (کیلوگرم) و قد (سانتی‌متر) خود را وارد کنید.\\n۲. روی 'محاسبه' کلیک کنید تا شاخص و وضعیت سلامت نمایش داده شود.",
+    en: "BMI Guide:\\n1. Enter your weight (kg) and height (cm).\\n2. Click 'Calculate' to see your BMI and health category.",
+    es: "Guía BMI:\\n1. Ingrese su peso (kg) y altura (cm).\\n2. Haga clic en 'Calcular'.",
+    ar: "دليل BMI:\\n١. أدخل الوزن (كجم) والطول (سم).\\n٢. اضغط 'احسب' لرؤية مؤشر كتلة الجسم.",
+    fr: "Guide IMC:\\n1. Entrez votre poids (kg) et taille (cm).\\n2. Cliquez sur 'Calculer'.",
+    de: "BMI-Anleitung:\\n1. Gewicht (kg) und Größe (cm) eingeben.\\n2. Auf 'Berechnen' klicken.",
+    ru: "Инструкция ИМТ:\\n1. Введите вес (кг) и рост (см).\\n2. Нажмите 'Рассчитать'.",
+    zh: "BMI 指南：\\n1. 输入体重(kg)和身高(cm)。\\n2. 点击“计算”。",
+    ja: "BMI ガイド:\\n1. 体重(kg)と身長(cm)を入力。\\n2. 「計算」をクリック。",
+    tr: "VKİ Rehberi:\\n1. Kilo (kg) ve boyu (cm) girin.\\n2. 'Hesapla'ya tıklayın.",
+    it: "Guida IMC:\\n1. Inserisci peso (kg) e altezza (cm).\\n2. Clicca 'Calcola'.",
+    pt: "Guia IMC:\\n1. Insira seu peso (kg) e altura (cm).\\n2. Clique em 'Calcular'."
+  };
+
+  Object.keys(bmiGuides).forEach(lang => {
+    if (translations[lang]) {
+      translations[lang].bmi = lang === 'fa' ? "محاسبه BMI" : (lang === 'ar' ? "مؤشر كتلة الجسم" : "BMI Calculator");
+      translations[lang].bmiGuideText = bmiGuides[lang];
+    }
+  });
+}
