@@ -105,6 +105,17 @@
       width: 100%;
     }
     .btn-accent { background: var(--accent-indigo); color: white; }
+    .pass-output {
+      font-family: monospace;
+      letter-spacing: 1px;
+      font-size: 18px;
+      text-align: center;
+      background: var(--bg);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -163,6 +174,13 @@
   <div class="card">
     <h3>📌 یادداشت سریع (ذخیره خودکار)</h3>
     <textarea class="input-field" id="noteInput" placeholder="یادداشت خود را بنویسید..." oninput="saveNote()"></textarea>
+  </div>
+
+  <!-- تولیدکننده رمز عبور -->
+  <div class="card">
+    <h3>🔐 تولیدکننده رمز عبور</h3>
+    <div class="pass-output" id="passOutput">رمز عبور اینجا نمایش داده می‌شود</div>
+    <button class="btn btn-accent" onclick="generatePassword()">ساخت رمز عبور جدید</button>
   </div>
 
   <script>
@@ -226,6 +244,15 @@
         document.getElementById('noteInput').value = savedNote;
       }
     };
+
+    function generatePassword() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*!";
+      let pass = "";
+      for (let i = 0; i < 12; i++) {
+        pass += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      document.getElementById('passOutput').innerText = pass;
+    }
   </script>
 </body>
 </html>
