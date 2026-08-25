@@ -4,121 +4,106 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexkit - Web Utilities</title>
-  <link rel="stylesheet" href="style.css">
-<style>
-  :root {
-    --bg: #f8fafc;
-    --card-bg: #ffffff;
-    --text: #0f172a;
-    --text-sub: #64748b;
-    --border: #e2e8f0;
-    --primary: #2563eb;
-    --btn-bg: #f1f5f9;
-    --btn-hover: #e2e8f0;
-  }
-  body {
-    margin: 0;
-    padding: 16px;
-    font-family: system-ui, -apple-system, sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-  }
-  .container { max-width: 600px; margin: 0 auto; }
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    margin-bottom: 16px;
-  }
-  .input-field {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg);
-    color: var(--text);
-    box-sizing: border-box;
-    margin-bottom: 8px;
-  }
-  .btn {
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--btn-bg);
-    color: var(--text);
-    cursor: pointer;
-    font-weight: 500;
-  }
-  .btn:hover { background: var(--btn-hover); }
-  .btn-accent { background: var(--primary); color: #fff; border: none; }
-  .tab-btn {
-    white-space: nowrap;
-    padding: 8px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--card-bg);
-    color: var(--text);
-    cursor: pointer;
-  }
-  .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-  .calc-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    direction: ltr !important;
-  }
-</style>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --btn-bg: #f1f5f9;
+      --btn-hover: #e2e8f0;
+    }
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+    .container { max-width: 600px; margin: 0 auto; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      margin-bottom: 16px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      box-sizing: border-box;
+      margin-bottom: 8px;
+    }
+    .btn {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--btn-bg);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .btn:hover { background: var(--btn-hover); }
+    .btn-accent { background: var(--primary); color: #fff; border: none; }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+    }
+    .tab-btn {
+      white-space: nowrap;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      direction: ltr !important;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header Controls -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
       <h1 style="margin: 0; font-size: 24px;">Nexkit</h1>
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <select id="langSelector" onchange="setLanguage(this.value)" class="theme-btn" style="cursor: pointer; padding: 6px 10px;">
-          <option value="fa">فارسی (Persian)</option>
-          <option value="en">English</option>
-          <option value="es">Español (Spanish)</option>
-          <option value="ar">العربية (Arabic)</option>
-          <option value="fr">Français (French)</option>
-          <option value="de">Deutsch (German)</option>
-          <option value="ru">Русский (Russian)</option>
-          <option value="zh">中文 (Chinese)</option>
-          <option value="ja">日本語 (Japanese)</option>
-          <option value="tr">Türkçe (Turkish)</option>
-          <option value="it">Italiano (Italian)</option>
-          <option value="pt">Português (Portuguese)</option>
-        </select>
-        <button onclick="toggleTheme()" class="theme-btn">🌙 / ☀️</button>
-      </div>
     </div>
 
-    <!-- Quick Search -->
-    <input type="text" id="quickSearch" class="input-field" placeholder="🔍 جستجوی سریع ابزارها..." onkeyup="filterTools()" style="margin-bottom: 12px;">
-
-    <!-- Navigation Tabs -->
-    <div class="nav-tabs" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 15px; -webkit-overflow-scrolling: touch;">
-      <button class="tab-btn active" onclick="switchTab('calc', this)" data-i18n="calc">ماشین حساب</button>
-      <button class="tab-btn" onclick="switchTab('json', this)" data-i18n="json">ابزار JSON</button>
-      <button class="tab-btn" onclick="switchTab('diff', this)" data-i18n="textDiff">مقایسه متن</button>
-      <button class="tab-btn" onclick="switchTab('case', this)" data-i18n="caseConv">فرمت حروف</button>
-      <button class="tab-btn" onclick="switchTab('pass', this)" data-i18n="pass">رمز عبور</button>
-      <button class="tab-btn" onclick="switchTab('base64', this)" data-i18n="crypto">Base64</button>
-      <button class="tab-btn" onclick="switchTab('bmi', this)" data-i18n="bmi">BMI</button>
-      <button class="tab-btn" onclick="switchTab('color', this)" data-i18n="color">مبدل رنگ</button>
-      <button class="tab-btn" onclick="switchTab('aspect', this)" data-i18n="aspect">نسبت تصویر</button>
+    <!-- Nav Tabs -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('calc', this)">ماشین حساب</button>
+      <button class="tab-btn" onclick="switchTab('json', this)">ابزار JSON</button>
+      <button class="tab-btn" onclick="switchTab('diff', this)">مقایسه متن</button>
+      <button class="tab-btn" onclick="switchTab('case', this)">فرمت حروف</button>
+      <button class="tab-btn" onclick="switchTab('pass', this)">رمز عبور</button>
+      <button class="tab-btn" onclick="switchTab('base64', this)">Base64</button>
+      <button class="tab-btn" onclick="switchTab('bmi', this)">BMI</button>
+      <button class="tab-btn" onclick="switchTab('color', this)">مبدل رنگ</button>
+      <button class="tab-btn" onclick="switchTab('aspect', this)">نسبت تصویر</button>
     </div>
 
-    <!-- Responsive Ad Unit Top -->
-    <div class="ad-banner-container" style="text-align: center; margin-bottom: 16px; padding: 15px; background: var(--card-bg, #f4f4f5); border: 1px dashed var(--border, #ccc); border-radius: 8px;">
+    <!-- Top Ad -->
+    <div style="text-align: center; margin-bottom: 16px; padding: 15px; background: var(--card-bg); border: 1px dashed var(--border); border-radius: 8px;">
       <span style="font-size: 12px; color: #888;">Advertisement Space (Responsive)</span>
     </div>
 
-    <!-- 1. Card Calculator -->
+    <!-- 1. Calculator -->
     <div class="card tool-card" id="tab-calc">
-      <h3 data-i18n="calc">Calculator</h3>
+      <h3>Calculator</h3>
       <input type="text" class="input-field" id="calcDisplay" readonly style="text-align: left; font-size: 20px; font-weight: bold;">
       <div class="calc-grid">
         <button class="btn" onclick="clearCalc()">C</button>
@@ -141,194 +126,93 @@
       </div>
     </div>
 
-    <!-- 2. Card JSON Tools -->
+    <!-- 2. JSON -->
     <div class="card tool-card" id="tab-json" style="display:none;">
-      <h3 data-i18n="json">JSON Tools</h3>
-      <div class="sub-tabs" style="margin-bottom: 10px;">
-        <button class="btn sub-tab-tool active" onclick="switchSubTab('json', 'tool', this)">Tool</button>
-        <button class="btn sub-tab-guide" onclick="switchSubTab('json', 'guide', this)">Guide</button>
+      <h3>JSON Tools</h3>
+      <textarea class="input-field" id="jsonInput" placeholder="JSON را وارد کنید..." style="min-height: 100px;"></textarea>
+      <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+        <button class="btn btn-accent" onclick="formatJSON()" style="flex: 1;">Format</button>
+        <button class="btn" onclick="minifyJSON()" style="flex: 1;">Minify</button>
       </div>
-      <div id="json-tool">
-        <textarea class="input-field" id="jsonInput" placeholder="Paste JSON here..." style="min-height: 100px; font-family: monospace;"></textarea>
-        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-          <button class="btn btn-accent" onclick="formatJSON()" style="flex: 1;">Format</button>
-          <button class="btn" onclick="minifyJSON()" style="flex: 1;">Minify</button>
-        </div>
-        <textarea class="input-field" id="jsonOutput" readonly placeholder="Output..." style="min-height: 100px; font-family: monospace;"></textarea>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn" onclick="copyToClipboard('jsonOutput')" style="flex:1;">📋 Copy</button>
-          <button class="btn" onclick="downloadAsFile('jsonOutput', 'formatted.json')" style="flex:1;">💾 Download</button>
-        </div>
-      </div>
-      <div id="json-guide" style="display:none;">
-        <div class="guide-content" style="white-space: pre-line;" data-i18n="jsonGuideText">JSON Guide Text...</div>
-      </div>
+      <textarea class="input-field" id="jsonOutput" readonly placeholder="نتیجه..." style="min-height: 100px;"></textarea>
     </div>
 
-    <!-- 3. Card Text Diff -->
+    <!-- 3. Diff -->
     <div class="card tool-card" id="tab-diff" style="display:none;">
-      <h3 data-i18n="textDiff">Text Diff</h3>
-      <div class="sub-tabs" style="margin-bottom: 10px;">
-        <button class="btn sub-tab-tool active" onclick="switchSubTab('diff', 'tool', this)">Tool</button>
-        <button class="btn sub-tab-guide" onclick="switchSubTab('diff', 'guide', this)">Guide</button>
-      </div>
-      <div id="diff-tool">
-        <textarea class="input-field" id="text1" placeholder="Original Text..." style="min-height: 70px;"></textarea>
-        <textarea class="input-field" id="text2" placeholder="Modified Text..." style="min-height: 70px;"></textarea>
-        <button class="btn btn-accent" onclick="compareTexts()" style="width: 100%; margin-bottom: 10px;">Compare Texts</button>
-        <div id="diffResult" style="background: var(--card-bg, #f4f4f5); padding: 10px; border-radius: 8px; font-family: monospace; min-height: 50px; margin-bottom: 10px; white-space: pre-wrap;"></div>
-        <button class="btn" onclick="downloadAsFile('diffResult', 'diff-result.txt')" style="width:100%;">💾 Download Result</button>
-      </div>
-      <div id="diff-guide" style="display:none;">
-        <div class="guide-content" style="white-space: pre-line;" data-i18n="diffGuideText">Diff Guide Text...</div>
-      </div>
+      <h3>Text Diff</h3>
+      <textarea class="input-field" id="text1" placeholder="متن اول..."></textarea>
+      <textarea class="input-field" id="text2" placeholder="متن دوم..."></textarea>
+      <button class="btn btn-accent" onclick="compareTexts()" style="width:100%; margin-bottom: 10px;">مقایسه</button>
+      <div id="diffResult" style="background: var(--bg); padding: 10px; border-radius: 8px;"></div>
     </div>
 
-    <!-- 4. Card Case Converter -->
+    <!-- 4. Case Converter -->
     <div class="card tool-card" id="tab-case" style="display:none;">
-      <h3 data-i18n="caseConv">Case Converter</h3>
-      <div class="sub-tabs" style="margin-bottom: 10px;">
-        <button class="btn sub-tab-tool active" onclick="switchSubTab('case', 'tool', this)">Tool</button>
-        <button class="btn sub-tab-guide" onclick="switchSubTab('case', 'guide', this)">Guide</button>
+      <h3>Case Converter</h3>
+      <textarea class="input-field" id="caseInput" placeholder="متن را وارد کنید..." oninput="updateTextStats('caseInput', 'caseStats')"></textarea>
+      <div id="caseStats" style="font-size: 12px; color: #666; margin-bottom: 8px;">Words: 0 | Chars: 0 | Lines: 0</div>
+      <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+        <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
+        <button class="btn" onclick="convertCase('lower')">lowercase</button>
+        <button class="btn" onclick="convertCase('title')">Title Case</button>
       </div>
-      <div id="case-tool">
-        <textarea class="input-field" id="caseInput" placeholder="Enter text..." style="min-height: 80px;" oninput="updateTextStats('caseInput', 'caseStats')"></textarea>
-      <div id="caseStats" style="font-size: 12px; color: var(--text-sub, #666); margin-bottom: 8px; font-family: monospace;">Words: 0 | Chars: 0 | Lines: 0</div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
-          <button class="btn" onclick="convertCase('upper')">UPPERCASE</button>
-          <button class="btn" onclick="convertCase('lower')">lowercase</button>
-          <button class="btn" onclick="convertCase('title')">Title Case</button>
-          <button class="btn" onclick="convertCase('camel')">camelCase</button>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn" onclick="clearField('caseInput', 'caseStats')" style="flex: 1;">🗑️ Clear</button>
-          <button class="btn" onclick="copyToClipboard('caseInput')" style="flex: 1;">📋 Copy</button>
-          <button class="btn" onclick="downloadAsFile('caseInput', 'converted-text.txt')" style="flex: 1;">💾 Download</button>
-        </div>
-      </div>
-      <div id="case-guide" style="display:none;">
-        <div class="guide-content" style="white-space: pre-line;" data-i18n="caseGuideText">Case Guide Text...</div>
-      </div>
+      <button class="btn" onclick="clearField('caseInput', 'caseStats')">🗑️ Clear</button>
     </div>
 
-    <!-- 5. Card Password Generator -->
+    <!-- 5. Password Generator -->
     <div class="card tool-card" id="tab-pass" style="display:none;">
-      <h3 data-i18n="pass">Password Generator</h3>
-      <div class="sub-tabs" style="margin-bottom: 10px;">
-        <button class="btn sub-tab-tool active" onclick="switchSubTab('pass', 'tool', this)">Tool</button>
-        <button class="btn sub-tab-guide" onclick="switchSubTab('pass', 'guide', this)">Guide</button>
+      <h3>Password Generator</h3>
+      <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+        <input type="number" id="passLength" class="input-field" value="12" style="width: 80px; margin:0;">
+        <button class="btn btn-accent" onclick="generatePassword()" style="flex:1;">تولید رمز</button>
       </div>
-      <div id="pass-tool">
-        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-          <input type="number" id="passLength" class="input-field" value="12" min="6" max="32" style="width: 80px; margin-bottom:0;">
-          <button class="btn btn-accent" onclick="generatePassword()" style="flex: 1;">Generate</button>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <input type="text" id="passOutput" class="input-field" readonly style="margin-bottom:0; flex:1;">
-          <button class="btn" onclick="copyToClipboard('passOutput')">📋 Copy</button>
-        </div>
-      </div>
-      <div id="pass-guide" style="display:none;">
-        <div class="guide-content" style="white-space: pre-line;" data-i18n="passGuideText">Password Guide Text...</div>
-      </div>
+      <input type="text" id="passOutput" class="input-field" readonly>
     </div>
 
-    <!-- 6. Card Base64 -->
+    <!-- 6. Base64 -->
     <div class="card tool-card" id="tab-base64" style="display:none;">
-      <h3 data-i18n="crypto">Base64 Encoder / Decoder</h3>
-      <div class="sub-tabs" style="margin-bottom: 10px;">
-        <button class="btn sub-tab-tool active" onclick="switchSubTab('base64', 'tool', this)">Tool</button>
-        <button class="btn sub-tab-guide" onclick="switchSubTab('base64', 'guide', this)">Guide</button>
+      <h3>Base64</h3>
+      <textarea class="input-field" id="cryptoInput" placeholder="متن..."></textarea>
+      <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+        <button class="btn btn-accent" onclick="processBase64('encode')" style="flex: 1;">Encode</button>
+        <button class="btn" onclick="processBase64('decode')" style="flex: 1;">Decode</button>
       </div>
-      <div id="base64-tool">
-        <textarea class="input-field" id="cryptoInput" placeholder="Enter text..." style="min-height: 70px;" oninput="updateTextStats('cryptoInput', 'cryptoStats')"></textarea>
-        <div id="cryptoStats" style="font-size: 12px; color: var(--text-sub, #666); margin-bottom: 8px; font-family: monospace;">Words: 0 | Chars: 0 | Lines: 0</div>
-        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-          <button class="btn btn-accent" onclick="processBase64('encode')" style="flex: 1;">Encode</button>
-          <button class="btn" onclick="processBase64('decode')" style="flex: 1;">Decode</button>
-        </div>
-        <div id="cryptoOutput" style="font-family: monospace; background: var(--card-bg, #f4f4f5); padding: 10px; border-radius: 8px; word-break: break-all; min-height: 40px; margin-bottom: 10px;">Output...</div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn" onclick="clearField('cryptoInput', 'cryptoStats')" style="flex: 1;">🗑️ Clear</button>
-          <button class="btn" onclick="copyToClipboard('cryptoOutput')" style="flex: 1;">📋 Copy</button>
-          <button class="btn" onclick="downloadAsFile('cryptoOutput', 'base64-result.txt')" style="flex: 1;">💾 Download</button>
-        </div>
-      </div>
-      <div id="base64-guide" style="display:none;">
-        <div class="guide-content" style="white-space: pre-line;" data-i18n="cryptoGuideText">Base64 Guide Text...</div>
-      </div>
+      <div id="cryptoOutput" style="background: var(--bg); padding: 10px; border-radius: 8px; word-break: break-all;"></div>
     </div>
 
-    <!-- 7. Card BMI -->
+    <!-- 7. BMI -->
     <div class="card tool-card" id="tab-bmi" style="display:none;">
-      <h3 data-i18n="bmi">BMI Calculator</h3>
-      <div class="sub-tabs" style="margin-bottom: 10px;">
-        <button class="btn sub-tab-tool active" onclick="switchSubTab('bmi', 'tool', this)">Tool</button>
-        <button class="btn sub-tab-guide" onclick="switchSubTab('bmi', 'guide', this)">Guide</button>
-      </div>
-      <div id="bmi-tool">
-        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-          <input type="number" id="bmiWeight" class="input-field" placeholder="Weight (kg)" style="margin-bottom:0; flex:1;">
-          <input type="number" id="bmiHeight" class="input-field" placeholder="Height (cm)" style="margin-bottom:0; flex:1;">
-        </div>
-        <button class="btn btn-accent" onclick="calculateBMI()" style="width: 100%; margin-bottom: 10px;">Calculate BMI</button>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <div id="bmiResult" style="font-family: monospace; background: var(--card-bg, #f4f4f5); padding: 10px; border-radius: 8px; flex: 1;">Result...</div>
-          <button class="btn" onclick="copyToClipboard('bmiResult')">📋 Copy</button>
-        </div>
-      </div>
-      <div id="bmi-guide" style="display:none;">
-        <div class="guide-content" style="white-space: pre-line;" data-i18n="bmiGuideText">BMI Guide Text...</div>
-      </div>
+      <h3>BMI Calculator</h3>
+      <input type="number" id="bmiWeight" class="input-field" placeholder="وزن (کیلوگرم)">
+      <input type="number" id="bmiHeight" class="input-field" placeholder="قد (سانتی‌متر)">
+      <button class="btn btn-accent" onclick="calculateBMI()" style="width: 100%; margin-bottom: 10px;">محاسبه BMI</button>
+      <div id="bmiResult" style="background: var(--bg); padding: 10px; border-radius: 8px;"></div>
     </div>
 
-  <!-- 8. Card Color Converter -->
+    <!-- 8. Color Converter -->
     <div class="card tool-card" id="tab-color" style="display:none;">
-      <h3 data-i18n="color">Color Code Converter</h3>
-      <div class="sub-tabs" style="margin-bottom: 10px;">
-        <button class="btn sub-tab-tool active" onclick="switchSubTab('color', 'tool', this)">Tool</button>
-        <button class="btn sub-tab-guide" onclick="switchSubTab('color', 'guide', this)">Guide</button>
-      </div>
-      <div id="color-tool">
-        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px;">
-          <input type="color" id="colorPicker" value="#2563eb" oninput="convertColor(this.value)" style="width: 50px; height: 40px; border: none; cursor: pointer; background: none;">
-          <input type="text" id="hexInput" class="input-field" value="#2563eb" oninput="convertColor(this.value)" placeholder="#2563eb" style="margin-bottom:0; flex:1;">
-        </div>
-        <div id="colorResult" style="font-family: monospace; background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 10px;">HEX: #2563EB  |  RGB: rgb(37, 99, 235)</div>
-        <button class="btn" onclick="copyToClipboard('colorResult')" style="width: 100%;">📋 Copy Code</button>
-      </div>
-      <div id="color-guide" style="display:none;">
-        <div class="guide-content" style="white-space: pre-line;" data-i18n="colorGuideText">Color Guide...</div>
-      </div>
+      <h3>Color Converter</h3>
+      <input type="color" id="colorPicker" value="#2563eb" oninput="convertColor(this.value)" style="width: 50px; height: 40px; cursor: pointer;">
+      <div id="colorResult" style="background: var(--bg); padding: 10px; border-radius: 8px; margin-top: 10px;">HEX: #2563EB | RGB: rgb(37, 99, 235)</div>
     </div>
 
-    <!-- 9. Card Aspect Ratio Calculator -->
+    <!-- 9. Aspect Ratio -->
     <div class="card tool-card" id="tab-aspect" style="display:none;">
-      <h3 data-i18n="aspect">Aspect Ratio Calculator</h3>
-      <div class="sub-tabs" style="margin-bottom: 10px;">
-        <button class="btn sub-tab-tool active" onclick="switchSubTab('aspect', 'tool', this)">Tool</button>
-        <button class="btn sub-tab-guide" onclick="switchSubTab('aspect', 'guide', this)">Guide</button>
+      <h3>Aspect Ratio Calculator</h3>
+      <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <input type="number" id="arW1" class="input-field" value="1920" style="margin:0;">
+        <span>:</span>
+        <input type="number" id="arH1" class="input-field" value="1080" style="margin:0;">
       </div>
-      <div id="aspect-tool">
-        <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center;">
-          <input type="number" id="arW1" class="input-field" placeholder="W1 (e.g. 1920)" value="1920" style="margin-bottom:0; flex:1;">
-          <span>:</span>
-          <input type="number" id="arH1" class="input-field" placeholder="H1 (e.g. 1080)" value="1080" style="margin-bottom:0; flex:1;">
-        </div>
-        <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center;">
-          <input type="number" id="arW2" class="input-field" placeholder="W2 (e.g. 1280)" oninput="calcAspectRatio()" style="margin-bottom:0; flex:1;">
-          <span>:</span>
-          <input type="number" id="arH2" class="input-field" placeholder="H2 (Auto)" readonly style="margin-bottom:0; flex:1; background: var(--bg);">
-        </div>
-        <button class="btn btn-accent" onclick="calcAspectRatio()" style="width: 100%;">Calculate New Height</button>
-      </div>
-      <div id="aspect-guide" style="display:none;">
-        <div class="guide-content" style="white-space: pre-line;" data-i18n="aspectGuideText">Aspect Guide...</div>
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <input type="number" id="arW2" class="input-field" placeholder="عرض جدید" oninput="calcAspectRatio()" style="margin:0;">
+        <span>:</span>
+        <input type="number" id="arH2" class="input-field" placeholder="ارتفاع جدید" readonly style="margin:0;">
       </div>
     </div>
 
-    <!-- Responsive Ad Unit Bottom -->
-    <div class="ad-banner-container" style="text-align: center; margin-top: 20px; padding: 15px; background: var(--card-bg, #f4f4f5); border: 1px dashed var(--border, #ccc); border-radius: 8px;">
+    <!-- Bottom Ad -->
+    <div style="text-align: center; margin-top: 20px; padding: 15px; background: var(--card-bg); border: 1px dashed var(--border); border-radius: 8px;">
       <span style="font-size: 12px; color: #888;">Advertisement Space (Footer Responsive)</span>
     </div>
   </div>
