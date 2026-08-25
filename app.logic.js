@@ -14,6 +14,7 @@ const translations = {
     history: "History",
     qr: "QR Code",
     gps: "GPS",
+    torch: "Flashlight",
     sensorActive: "Sensor activated.",
     sensorNotSupported: "Not supported.",
     compassActive: "Compass activated.",
@@ -49,6 +50,7 @@ const translations = {
     history: "تاریخچه",
     qr: "بارکد QR",
     gps: "موقعیت‌یاب",
+    torch: "چراغ‌قوه صفحه",
     sensorActive: "سنسور تراز فعال شد.",
     sensorNotSupported: "پشتیبانی نمی‌شود.",
     compassActive: "قطب‌نما فعال شد.",
@@ -322,4 +324,19 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   });
+}
+
+// چراغ‌قوه صفحه نمایش
+function toggleScreenTorch() {
+  let overlay = document.getElementById('torchOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'torchOverlay';
+    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; cursor: pointer;';
+    overlay.innerHTML = '<span style="color: black; font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.1); padding: 10px 20px; border-radius: 20px;">تپ کنید برای خروج / Tap to exit</span>';
+    overlay.onclick = () => overlay.remove();
+    document.body.appendChild(overlay);
+  } else {
+    overlay.remove();
+  }
 }

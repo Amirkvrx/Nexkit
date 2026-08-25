@@ -12,7 +12,6 @@
   <div class="header">
     <div class="logo">Nexkit</div>
     <div style="display: flex; gap: 8px; align-items: center;">
-      <!-- منوی انتخاب ۱۲ زبان -->
       <select id="langSelector" onchange="setLanguage(this.value)" class="theme-btn" style="cursor: pointer; padding: 6px 10px;">
         <option value="en">English</option>
         <option value="fa">فارسی</option>
@@ -44,6 +43,7 @@
     <button class="tab-btn" onclick="switchTab('pass', this)" data-i18n="pass">Password</button>
     <button class="tab-btn" onclick="switchTab('history', this)" data-i18n="history">History</button>
     <button class="tab-btn" onclick="switchTab('qr', this)" data-i18n="qr">QR Code</button>
+    <button class="tab-btn" onclick="switchTab('torch', this)" data-i18n="torch">Flashlight</button>
     <button class="tab-btn" onclick="switchTab('gps', this)" data-i18n="gps">GPS</button>
   </div>
 
@@ -131,6 +131,12 @@
     <h3 data-i18n="qr">QR Code Generator</h3>
     <input type="text" class="input-field" id="qrInput" placeholder="Link or text..." oninput="generateQR()">
     <div id="qrcode"></div>
+  </div>
+
+  <div class="card" id="tab-torch" style="text-align: center;">
+    <h3 data-i18n="torch">Flashlight</h3>
+    <p style="color: var(--border); margin-bottom: 15px;">Turns your screen into a bright white light source.</p>
+    <button class="btn btn-accent" onclick="toggleScreenTorch()" style="padding: 14px 28px; font-size: 16px;">💡 Turn On Light</button>
   </div>
 
   <div class="card" id="tab-gps" style="text-align: center;">
