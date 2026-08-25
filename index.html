@@ -23,6 +23,8 @@
   <div class="nav-tabs">
     <button class="tab-btn" onclick="switchTab('calc', this)" data-i18n="calc">Calculator</button>
     <button class="tab-btn" onclick="switchTab('loan', this)" data-i18n="loan">Loan Calc</button>
+    <button class="tab-btn" onclick="switchTab('crypto', this)" data-i18n="crypto">Base64</button>
+    <button class="tab-btn" onclick="switchTab('timer', this)" data-i18n="timer">Timer</button>
     <button class="tab-btn" onclick="switchTab('converter', this)" data-i18n="converter">Converter</button>
     <button class="tab-btn" onclick="switchTab('text', this)" data-i18n="text">Text</button>
     <button class="tab-btn" onclick="switchTab('notes', this)" data-i18n="notes">Notes</button>
@@ -65,6 +67,23 @@
     <input type="number" class="input-field" id="loanMonths" placeholder="Term (Months)">
     <button class="btn btn-accent" onclick="calculateLoan()" style="width: 100%; margin-bottom: 12px;">Calculate</button>
     <p id="loanResult" style="font-size: 14px; line-height: 1.6;"></p>
+  </div>
+
+  <div class="card" id="tab-crypto">
+    <h3 data-i18n="crypto">Base64 Encoder / Decoder</h3>
+    <textarea class="input-field" id="cryptoInput" placeholder="Enter text to encode or decode..."></textarea>
+    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+      <button class="btn btn-accent" onclick="encodeBase64()" style="flex: 1;">Encode</button>
+      <button class="btn" onclick="decodeBase64()" style="flex: 1;">Decode</button>
+    </div>
+    <p id="cryptoOutput" style="font-family: monospace; background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); word-break: break-all; min-height: 40px;">Output will appear here...</p>
+  </div>
+
+  <div class="card" id="tab-timer">
+    <h3 data-i18n="timer">Timer & Reminder</h3>
+    <input type="number" class="input-field" id="timerSeconds" placeholder="Seconds (e.g. 60)">
+    <button class="btn btn-accent" onclick="startTimer()" style="width: 100%; margin-bottom: 15px;">Start Timer</button>
+    <h2 id="timerDisplay" style="text-align: center; color: var(--accent-cyan); font-family: monospace;">0s</h2>
   </div>
 
   <div class="card" id="tab-converter">

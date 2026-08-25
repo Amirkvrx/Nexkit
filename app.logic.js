@@ -4,16 +4,18 @@ const translations = {
   en: {
     level: "Digital Level", compass: "Digital Compass", calc: "Calculator", loan: "Loan Calc",
     converter: "Length Converter", tempConverter: "Temperature Converter", text: "Text Counter",
-    notes: "Quick Notes", todo: "To-Do List", clock: "World Clock", pass: "Password Generator",
-    history: "Password History", qr: "QR Code", torch: "Flashlight", gps: "GPS Location",
-    settings: "Settings", backup: "Backup Data", addTaskBtn: "Add", genPassBtn: "Generate New", getGpsBtn: "Get GPS Location"
+    crypto: "Hash & Base64", timer: "Timer & Reminder", notes: "Quick Notes", todo: "To-Do List",
+    clock: "World Clock", pass: "Password Generator", qr: "QR Code", torch: "Flashlight",
+    gps: "GPS Location", settings: "Settings", backup: "Backup Data", addTaskBtn: "Add",
+    genPassBtn: "Generate New", getGpsBtn: "Get GPS Location"
   },
   fa: {
     level: "تراز دیجیتال", compass: "قطب‌نما", calc: "ماشین حساب", loan: "محاسبه وام",
     converter: "مبدل طول", tempConverter: "مبدل دما", text: "شمارشگر متن",
-    notes: "یادداشت سریع", todo: "کارهای روزمره", clock: "ساعت جهانی", pass: "تولید رمز عبور",
-    history: "تاریخچه رمزها", qr: "بارکد QR", torch: "چراغ‌قوه صفحه", gps: "موقعیت‌یاب GPS",
-    settings: "تنظیمات", backup: "پشتیبان‌گیری", addTaskBtn: "افزودن", genPassBtn: "تولید جدید", getGpsBtn: "دریافت موقعیت"
+    crypto: "هش و کدگذاری", timer: "تایمر و یادآور", notes: "یادداشت سریع", todo: "کارهای روزمره",
+    clock: "ساعت جهانی", pass: "تولید رمز عبور", qr: "بارکد QR", torch: "چراغ‌قوه صفحه",
+    gps: "موقعیت‌یاب GPS", settings: "تنظیمات", backup: "پشتیبان‌گیری", addTaskBtn: "افزودن",
+    genPassBtn: "تولید جدید", getGpsBtn: "دریافت موقعیت"
   }
 };
 
@@ -62,7 +64,7 @@ function calculate() {
   }
 }
 
-// محاسبه اقساط وام (Loan Calculator)
+// محاسبه اقساط وام
 function calculateLoan() {
   const amount = parseFloat(document.getElementById('loanAmount').value);
   const rate = parseFloat(document.getElementById('loanRate').value) / 100 / 12;
@@ -81,6 +83,44 @@ function calculateLoan() {
     Monthly: <strong>${monthly.toFixed(2)}</strong><br>
     Total Pay: <strong>${totalPayment.toFixed(2)}</strong>
   `;
+}
+
+// هش و کدگذاری Base64
+function encodeBase64() {
+  const str = document.getElementById('cryptoInput').value;
+  try {
+    document.getElementById('cryptoOutput').innerText = btoa(unescape(encodeURIComponent(str)));
+  } catch(e) {
+    document.getElementById('cryptoOutput').innerText = "Encoding Error";
+  }
+}
+
+function decodeBase64() {
+  const str = document.getElementById('cryptoInput').value;
+  try {
+    document.getElementById('cryptoOutput').innerText = decodeURIComponent(escape(atob(str)));
+  } catch(e) {
+    document.getElementById('cryptoOutput').innerText = "Invalid Base64 string";
+  }
+}
+
+// تایمر و هشدار
+let timerInterval = null;
+function startTimer() {
+  let sec = parseInt(document.getElementById('timerSeconds').value);
+  if (isNaN(sec) || sec <= 0) return;
+  clearInterval(timerInterval);
+  
+  const display = document.getElementById('timerDisplay');
+  timerInterval = setInterval(() => {
+    sec--;
+    display.innerText = `${sec}s remaining...`;
+    if (sec <= 0) {
+      clearInterval(timerInterval);
+      display.innerText = "⏰ Time's up!";
+      if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
+    }
+  }, 1000);
 }
 
 // مبدل‌ها
@@ -162,14 +202,12 @@ function updateWorldClocks() {
 }
 setInterval(updateWorldClocks, 1000);
 
-// پشتیبان‌گیری و خروجی/ورودی داده‌ها (Export / Import Backup)
+// پشتیبان‌گیری
 function exportBackup() {
   const data = {};
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key.startsWith('nexkit_')) {
-      data[key] = localStorage.getItem(key);
-    }
+    if (key.startsWith('nexkit_')) data[key] = localStorage.getItem(key);
   }
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
@@ -190,9 +228,7 @@ function importBackup(event) {
       });
       alert('Backup restored successfully!');
       location.reload();
-    } catch (err) {
-      alert('Invalid JSON file.');
-    }
+    } catch (err) { alert('Invalid JSON file.'); }
   };
   reader.readAsText(file);
 }
@@ -224,9 +260,7 @@ function toggleScreenTorch() {
     overlay.innerHTML = '<span style="color: black; font-weight: bold; font-size: 18px;">Tap to exit</span>';
     overlay.onclick = () => overlay.remove();
     document.body.appendChild(overlay);
-  } else {
-    overlay.remove();
-  }
+  } else { overlay.remove(); }
 }
 
 // GPS
