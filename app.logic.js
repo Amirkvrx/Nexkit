@@ -474,3 +474,57 @@ if (typeof translations !== 'undefined') {
     }
   });
 }
+
+// تابع اصلی سوئیچ تب‌ها
+function switchTab(tabName, btnElement) {
+  // پنهان کردن تمامی کارت‌ها
+  const cards = document.querySelectorAll('.tool-card');
+  cards.forEach(card => card.style.display = 'none');
+
+  // غیرفعال کردن کلاس active تمام دکمه‌های ناوبری
+  const navBtns = document.querySelectorAll('.tab-btn');
+  navBtns.forEach(btn => btn.classList.remove('active'));
+
+  // فعال کردن دکمه و نمایش کارت مقصد
+  if (btnElement) btnElement.classList.add('active');
+  
+  const targetCard = document.getElementById('tab-' + tabName);
+  if (targetCard) {
+    targetCard.style.display = 'block';
+  }
+}
+
+// تابع سوئیچ بین Tool و Guide
+function switchSubTab(cardName, paneType, btnElement) {
+  const card = document.getElementById('tab-' + cardName);
+  if (!card) return;
+
+  const toolPane = card.querySelector('#' + cardName + '-tool');
+  const guidePane = card.querySelector('#' + cardName + '-guide');
+  const btns = card.querySelectorAll('.sub-tabs .btn');
+
+  btns.forEach(b => b.classList.remove('active'));
+  if (btnElement) btnElement.classList.add('active');
+
+  if (paneType === 'tool') {
+    if (toolPane) toolPane.style.display = 'block';
+    if (guidePane) guidePane.style.display = 'none';
+  } else {
+    if (toolPane) toolPane.style.display = 'none';
+    if (guidePane) guidePane.style.display = 'block';
+  }
+}
+
+// جستجوی سریع ابزارها
+function filterTools() {
+  const query = document.getElementById('quickSearch').value.toLowerCase();
+  const btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(btn => {
+    const text = btn.innerText.toLowerCase();
+    if (text.includes(query)) {
+      btn.style.display = 'inline-block';
+    } else {
+      btn.style.display = 'none';
+    }
+  });
+}
